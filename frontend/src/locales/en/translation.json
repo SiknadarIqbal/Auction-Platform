@@ -1,0 +1,508 @@
+{
+  "agreement": {
+    "title": "Usage Agreement",
+    "subtitle": "Please read and accept the following terms to proceed",
+    "articles": {
+      "intro": {
+        "title": "Introduction",
+        "content": "These Terms and Conditions constitute a legally binding agreement between the Platform and any user. Accessing, registering, or using the Platform in any manner constitutes full and unconditional acceptance of these Terms."
+      },
+      "definitions": {
+        "title": "Definitions",
+        "items": [
+          "Platform: The website and any affiliated applications.",
+          "User: Any individual or entity accessing or using the Platform.",
+          "Seller: Any natural or legal person listing a product for auction.",
+          "Buyer: Any User placing a bid in an auction.",
+          "Auction: A competitive bidding process where price increases until closing."
+        ]
+      },
+      "nature": {
+        "title": "Nature of the Platform’s Role",
+        "items": [
+          "The Platform provides a technical venue for listing products through auctions only.",
+          "The Platform does not own, store, or inspect any listed products.",
+          "The Platform does not act as agent or broker for either Sellers or Buyers.",
+          "The Platform is not a party to any sale contract concluded between Users.",
+          "The contractual relationship exists exclusively between the Seller and the Buyer."
+        ]
+      },
+      "seller": {
+        "title": "Seller Responsibilities",
+        "items": [
+          "The Seller represents lawful ownership or legal authorization to sell.",
+          "The Seller is solely responsible for description accuracy.",
+          "The Seller bears full legal liability for the product.",
+          "The Seller agrees to indemnify the Platform against any claims."
+        ]
+      },
+      "buyer": {
+        "title": "Buyer Responsibilities",
+        "items": [
+          "The Buyer is responsible for reviewing product details prior to bidding.",
+          "Placing a bid is a legally binding commitment if awarded.",
+          "The Buyer is responsible for payment arrangements directly with the Seller."
+        ]
+      },
+      "fees": {
+        "title": "Fees and Charges",
+        "items": [
+          "Registration and use are currently free for a limited period.",
+          "The Platform reserves the right to impose future fees or commissions.",
+          "Users will be notified prior to any fee implementation."
+        ]
+      },
+      "realestate": {
+        "title": "Real Estate Exclusion",
+        "content": "Listing or auctioning real estate (land, buildings, residential units) is strictly prohibited. Such listings will be removed immediately."
+      },
+      "prohibited": {
+        "title": "Prohibited Products",
+        "content": "Prohibited items include weapons, narcotics, stolen goods, counterfeit currency, and any product violating Saudi Arabian laws."
+      },
+      "aml": {
+        "title": "Anti-Money Laundering (AML)",
+        "content": "Users must comply with Saudi AML laws. The Platform may request identity verification and report suspicious activity to authorities."
+      },
+      "general": {
+        "title": "General Provisions",
+        "content": "The Platform is provided 'as is'. Intellectual property rights are reserved. These Terms are governed by the laws of the Kingdom of Saudi Arabia, and Saudi courts have exclusive jurisdiction."
+      },
+      "acknowledgment": {
+        "title": "Acknowledgment",
+        "content": "The User acknowledges they have read, understood, and agreed to these Terms voluntarily and assume full legal responsibility for their activities."
+      }
+    },
+    "iAgree": "I Have Read & Agree to the Terms",
+    "proceed": "Continue to Login/Signup"
+  },
+  "navbar": {
+    "title": "Auction Platform",
+    "subtitle": "Premium Collectibles",
+    "search": "Search auctions...",
+    "notifications": "Notifications",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "markAllRead": "Mark all read",
+    "viewAll": "View All",
+    "noNotifications": "No new notifications"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Login to your account",
+      "email": "Email Address",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Login",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign up here",
+      "tagline": "Your gateway to rare and valuable collectibles",
+      "whyChoose": "Why Choose Us?",
+      "stats": {
+        "activeUsers": "Active Users",
+        "itemsSold": "Items Sold",
+        "satisfaction": "Satisfaction"
+      },
+      "features": {
+        "liveBidding": "Live Bidding",
+        "liveBiddingDesc": "Real-time auction updates",
+        "rareItems": "Win Rare Items",
+        "rareItemsDesc": "Exclusive collectibles"
+      }
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join our auction platform",
+      "name": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "signupButton": "Sign Up",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Login here",
+      "joinCommunity": "Join Our Community",
+      "journeyStart": "Start your journey to discover rare treasures",
+      "benefits": "Member Benefits",
+      "testimonial": {
+        "role": "Collector since 2025",
+        "quote": "\"Best auction platform I've used. Won amazing collectibles at great prices!\""
+      },
+      "successTitle": "Registration Successful!",
+      "successMessage": "Please check your email inbox for a verification link. You must verify your email before you can log in.",
+      "goToLogin": "Go to Login",
+      "passwordMismatch": "Passwords do not match",
+      "buyer": "Buyer",
+      "seller": "Seller",
+      "benefitsList": {
+        "dashboard": "Personalized Dashboard",
+        "dashboardDesc": "Track your bids and wins",
+        "notifications": "Smart Notifications",
+        "notificationsDesc": "Never miss an auction end"
+      },
+      "strength": {
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      },
+      "agreeTerms": "I agree to the Terms and Conditions",
+      "acceptTermsError": "Please accept the terms and conditions",
+      "passwordShortError": "Password must be at least 6 characters long"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email to reset password",
+      "email": "Email Address",
+      "sendButton": "Send Reset Link",
+      "backToLogin": "Back to Login",
+      "instructions": "No worries, we'll send you reset instructions.",
+      "successTitle": "Email Sent!",
+      "successMessage": "Check your inbox for a link to reset your password.",
+      "sending": "Sending Email...",
+      "resetButton": "Reset Password",
+      "placeholder": "Enter your verified email"
+    },
+    "resetPassword": {
+      "title": "Set New Password",
+      "subtitle": "Must be at least 6 characters.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "resetButton": "Reset Password",
+      "resetting": "Resetting Password...",
+      "successTitle": "Success!",
+      "successMessage": "Your password has been reset successfully.",
+      "redirecting": "Redirecting to login...",
+      "placeholder": "Enter new password",
+      "confirmPlaceholder": "Confirm new password"
+    },
+    "verifyEmail": {
+      "title": "Verify Email",
+      "subtitle": "Check your email for verification link",
+      "resend": "Resend Email",
+      "backToLogin": "Back to Login",
+      "verifying": "Verifying your email...",
+      "invalidLink": "Invalid verification link",
+      "success": "Email verified successfully! Redirecting to login...",
+      "failed": "Verification failed",
+      "expired": "Verification failed. The link may be expired or invalid.",
+      "verifiedTitle": "Email Verified!"
+    }
+  },
+  "frontpage": {
+    "hero": {
+      "title": "Discover Rare Collectibles",
+      "subtitle": "Bid on exclusive items from around the world",
+      "cta": "Explore Auctions"
+    },
+    "stats": {
+      "activeAuctions": "Active Auctions",
+      "totalBids": "Total Bids",
+      "itemsSold": "Items Sold",
+      "activeBidders": "Active Bidders"
+    },
+    "categories": {
+      "title": "Browse Categories",
+      "all": "All Categories",
+      "allItems": "All Items",
+      "watches": "Watches",
+      "art": "Art",
+      "antiques": "Antiques",
+      "collectibles": "Collectibles",
+      "furniture": "Furniture",
+      "luxury": "Luxury"
+    },
+    "featured": {
+      "title": "Featured Auctions",
+      "viewAll": "View All"
+    }
+  },
+  "product": {
+    "currentBid": "Current Bid",
+    "startingBid": "Starting Bid",
+    "timeLeft": "Time Left",
+    "ended": "Auction Ended",
+    "placeBid": "Place Bid",
+    "buyNow": "Buy Now",
+    "viewDetails": "View Details",
+    "description": "Description",
+    "bidHistory": "Bid History",
+    "seller": "Seller",
+    "category": "Category",
+    "condition": "Condition",
+    "shipping": "Shipping",
+    "bids": "bids",
+    "noBids": "No bids yet",
+    "item": "item",
+    "items": "items",
+    "backToAuctions": "Back to Auctions",
+    "internetLost": "Internet Connection Lost. Bidding disabled.",
+    "retry": "Retry",
+    "auctionEndedTitle": "Auction Ended",
+    "auctionEndedSubtitle": "This item has been sold successfully.",
+    "winningBidder": "Winning Bidder",
+    "finalPrice": "Final Price",
+    "goToDashboard": "Go to Dashboard",
+    "bidSuccess": "Bid placed successfully!",
+    "yearMade": "Year Made",
+    "location": "Location",
+    "contact": "Contact",
+    "reportFraud": "Report Fraud / Suspicious Item",
+    "productId": "Product ID",
+    "watchers": "Watchers",
+    "placeYourBid": "Place Your Bid",
+    "reserveMet": "Reserve Met",
+    "reserveNotMet": "Reserve Not Met",
+    "orPlaceBid": "OR PLACE BID",
+    "yourBidAmount": "Your Bid Amount",
+    "minBid": "Minimum bid",
+    "processingBid": "Processing Bid...",
+    "minBidButton": "Min Bid",
+    "verified": "Verified",
+    "verifiedSeller": "Verified Seller",
+    "buyNowFor": "Buy Now for {{price}}",
+    "minNextBid": "Min. Next Bid",
+    "views": "views",
+    "hot": "Hot",
+    "endingSoon": "Ending Soon",
+    "bidSuccessExtension": "Bid placed successfully! (Time extended by 5s)",
+    "syncWithServer": "Synced with Server",
+    "buyNowDesc": "Immediate purchase. Ends auction.",
+    "user": "User",
+    "justNow": "Just now",
+    "watch": "Watch",
+    "unwatch": "Unwatch"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "tabs": {
+      "overview": "Overview",
+      "myProducts": "My Products",
+      "myBids": "My Bids",
+      "wonAuctions": "Won Auctions",
+      "unsoldItems": "Unsold Items",
+      "liveAuctions": "Live Auctions",
+      "auditLog": "Audit Log",
+      "manageLive": "Manage Live",
+      "categories": "Categories",
+      "notification": "Notifications",
+      "settings": "Settings",
+      "adminControls": "Admin Controls"
+    },
+    "admin": {
+      "auditLog": "Audit Log",
+      "action": "Action",
+      "target": "Target",
+      "admin": "Admin",
+      "time": "Time",
+      "manageLive": "Manage Live Auctions",
+      "noLive": "No live auctions found.",
+      "noAuditLog": "No audit log entries yet.",
+      "pause": "Pause",
+      "cancel": "Cancel",
+      "reasonRequired": "Reason is required",
+      "confirm": "Confirm",
+      "pauseSuccess": "Auction paused successfully.",
+      "cancelSuccess": "Auction cancelled successfully."
+    },
+    "products": {
+      "title": "My Items For Sale",
+      "addNew": "Add New Auction",
+      "backToProducts": "Back to Products",
+      "addTitle": "Add New Product",
+      "noItems": "No items listed yet",
+      "noItemsSubtitle": "Start",
+      "addFirst": "Add Your First Item",
+      "productName": "Product Name",
+      "category": "Category",
+      "startingBid": "Starting Bid ($)",
+      "minBid": "Minimum Bid ($)",
+      "buyNowPrice": "Buy Now Price ($)",
+      "optional": "Optional",
+      "condition": "Condition",
+      "yearMade": "Year Made",
+      "location": "Location",
+      "contactNumber": "Contact Number",
+      "reservePrice": "Reserve Price ($)",
+      "duration": "Duration (Days)",
+      "productImages": "Product Images",
+      "imagesLimit": "Up to 10",
+      "uploadImages": "Click to upload product images",
+      "uploadHint": "PNG, JPG, WEBP up to 10MB each (Max 10 images)",
+      "description": "Description",
+      "submitAdd": "Add Product",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "status": "Status",
+      "currentBid": "Current Bid",
+      "bids": "Bids"
+    },
+    "unsold": {
+      "title": "Unsold Items",
+      "noItems": "No unsold items.",
+      "noItemsSubtitle": "Archive"
+    },
+    "wonAuctions": {
+      "title": "Won Auctions",
+      "noItems": "No won auctions yet",
+      "noItemsSubtitle": "Bid",
+      "browse": "Browse Auctions",
+      "finalPrice": "Final Price"
+    },
+    "liveAuctions": {
+      "title": "Active Bidding",
+      "loading": "Loading live auctions...",
+      "noBids": "No Active Bids",
+      "noBidsSubtitle": "Bid",
+      "browse": "Browse Auctions",
+      "viewDetails": "View Details"
+    },
+    "category": {
+      "add": "Add Category",
+      "addTitle": "Add New Category",
+      "editTitle": "Edit Category"
+    },
+    "settings": {
+      "account": "Account Settings",
+      "changePassword": "Change Password",
+      "emailNotif": "Receive email notifications",
+      "bidNotif": "Receive bid updates",
+      "appearance": "Appearance",
+      "darkMode": "Dark Mode",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDesc": "Permanently delete your account and data",
+      "signOut": "Sign Out",
+      "signOutDesc": "Log out of your account",
+      "logoutConfirm": "Are you sure you want to logout?"
+    },
+    "notifications": {
+      "noNotifications": "No new notifications",
+      "noItems": "No Notifications Yet",
+      "noItemsSubtitle": "Clear",
+      "markAllRead": "Mark all as read",
+      "clearAll": "Clear All",
+      "new": "New",
+      "types": {
+        "win": "🏆 Congratulations! You won \"{{title}}\" for ${{price}}.",
+        "sale": "💰 Your auction \"{{title}}\" was sold for ${{price}}!",
+        "outbid": "📉 You have been outbid on \"{{title}}\"!",
+        "new_auction": "📢 New Auction: \"{{title}}\" has just been listed!",
+        "info_no_sale": "ℹ️ Your auction \"{{title}}\" ended without a sale.",
+        "info_reserve": "ℹ️ The auction for \"{{title}}\" ended. The reserve price was not met.",
+        "auction_ending": "⏰ The auction for \"{{title}}\" is ending soon!",
+        "payment_due": "💳 Payment is due for \"{{title}}\". Please complete your purchase.",
+        "auction_extended": "⏱️ The auction for \"{{title}}\" has been extended.",
+        "auction_paused": "⏸️ The auction for \"{{title}}\" has been paused.",
+        "auction_cancelled": "❌ The auction for \"{{title}}\" has been cancelled.",
+        "default": "🔔 You have a new notification."
+      }
+    },
+    "bids": {
+      "myMaxBid": "My Max Bid",
+      "highestBid": "Highest Bid",
+      "timeLeft": "Time Left",
+      "noItems": "No Active Bids",
+      "noItemsSubtitle": "Explore",
+      "browse": "Browse Auctions"
+    },
+    "actions": {
+      "addProduct": "Add Product",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "pay": "Pay",
+      "cancel": "Cancel"
+    },
+    "table": {
+      "image": "Image",
+      "title": "Title",
+      "price": "Price",
+      "status": "Status",
+      "bids": "Bids",
+      "endDate": "End Date",
+      "actions": "Actions",
+      "amount": "Amount",
+      "date": "Date",
+      "time": "Time"
+    },
+    "status": {
+      "active": "Active",
+      "ended": "Ended",
+      "sold": "Sold",
+      "unsold": "Unsold",
+      "winning": "Winning",
+      "outbid": "Outbid",
+      "resolved": "Resolved"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "create": "Create",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "name": "Name",
+    "description": "Description",
+    "add": "Add",
+    "close": "Close",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "noResults": "No results found",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "tryAgain": "Try Again",
+    "available": "available",
+    "adjustFilters": "Try adjusting your search or filters",
+    "select": "Select...",
+    "backHome": "Back to Home"
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "ago": "ago",
+    "justNow": "Just now"
+  },
+  "messages": {
+    "loginSuccess": "Login successful",
+    "loginError": "Login failed",
+    "signupSuccess": "Account created successfully",
+    "signupError": "Signup failed",
+    "bidPlaced": "Bid placed successfully",
+    "bidError": "Failed to place bid",
+    "paymentSuccess": "Payment successful",
+    "paymentError": "Payment failed"
+  },
+  "footer": {
+    "about": "About Us",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "help": "Help Center",
+    "categories": "Top Categories",
+    "copyright": "© 2026 Auction Platform. All rights reserved."
+  },
+  "table": {
+    "image": "Image",
+    "title": "Title",
+    "price": "Price",
+    "status": "Status",
+    "bids": "Bids",
+    "endDate": "End Date",
+    "actions": "Actions",
+    "amount": "Amount",
+    "date": "Date",
+    "time": "Time"
+  }
+}
