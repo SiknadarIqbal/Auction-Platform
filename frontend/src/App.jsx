@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
 import Frontpage from "./pages/Frontpage/Frontpage";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -14,7 +14,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 
 import { useNavigate } from "react-router-dom";
 import Agreement from "./pages/Auth/Agreement";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 function AppContent() {
   const location = useLocation();
