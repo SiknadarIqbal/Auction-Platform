@@ -12,8 +12,7 @@ const Navbar = () => {
     const { currentLanguage, changeLanguage, isRTL } = useLanguage();
     const isRtl = isRTL;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
+    // Search bar removed from navbar; keep state out to avoid unused warnings
     const location = useLocation();
     const [isLanguageOpen, setIsLanguageOpen] = useState(false);
     const [notificationCount, setNotificationCount] = useState(0);
@@ -50,38 +49,7 @@ const Navbar = () => {
 
                     {/* Right Side Actions */}
                     <div className="flex items-center gap-3 lg:gap-4">
-                        {/* Search Bar - Desktop */}
-                        <div className="hidden md:block">
-                            {isSearchOpen ? (
-                                <div className="flex items-center gap-2 bg-slate-700/50 backdrop-blur-sm rounded-lg px-4 py-2 animate-fadeIn border border-slate-600">
-                                    <FaSearch className="text-lg text-slate-400" />
-                                    <input
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder={t('navbar.search')}
-                                        className="bg-transparent border-none outline-none text-white placeholder-slate-400 w-48"
-                                        autoFocus
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            setIsSearchOpen(false);
-                                            setSearchQuery("");
-                                        }}
-                                        className="text-slate-400 hover:text-white"
-                                    >
-                                        <FaTimes />
-                                    </button>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={() => setIsSearchOpen(true)}
-                                    className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center hover:bg-slate-600 transition-all duration-300 hover:scale-110 shadow-md"
-                                >
-                                    <FaSearch className="text-lg" />
-                                </button>
-                            )}
-                        </div>
+                        {/* Search Bar removed from navbar */}
 
                         {/* Language Switcher */}
                         <div className="relative">
@@ -187,18 +155,6 @@ const Navbar = () => {
                 {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className="lg:hidden py-4 border-t border-slate-700 animate-slideDown">
-                        {/* Mobile Search */}
-                        <div className="mb-4">
-                            <div className="flex items-center gap-2 bg-slate-700/50 backdrop-blur-sm rounded-lg px-4 py-3 border border-slate-600">
-                                <FaSearch className="text-lg text-slate-400" />
-                                <input
-                                    type="text"
-                                    placeholder={t('navbar.search')}
-                                    className="bg-transparent border-none outline-none text-white placeholder-slate-400 w-full"
-                                />
-                            </div>
-                        </div>
-
                         {/* Mobile Auth Buttons */}
                         <div className="space-y-2 mb-4">
                             <Link

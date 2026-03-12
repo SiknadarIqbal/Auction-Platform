@@ -56,11 +56,11 @@ const Login = () => {
                 setLoginError(null);
                 setVerificationError({
                     ...verificationError,
-                    message: '✅ Verification email sent! Please check your inbox.'
+                    message: t('auth.login.verificationEmailSent')
                 });
             }
         } catch (error) {
-            setLoginError(error.response?.data?.message || 'Failed to resend verification email');
+            setLoginError(error.response?.data?.message || t('auth.login.resendFailed'));
         } finally {
             setResendingEmail(false);
         }
@@ -114,15 +114,15 @@ const Login = () => {
                 <div className="relative z-10 grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
                     <div>
                         <p className="text-3xl font-bold">12K+</p>
-                        <p className="text-blue-200 text-sm">Active Users</p>
+                        <p className="text-blue-200 text-sm">{t('auth.login.stats.activeUsers')}</p>
                     </div>
                     <div>
                         <p className="text-3xl font-bold">8.5K</p>
-                        <p className="text-blue-200 text-sm">Items Sold</p>
+                        <p className="text-blue-200 text-sm">{t('auth.login.stats.itemsSold')}</p>
                     </div>
                     <div>
                         <p className="text-3xl font-bold">99%</p>
-                        <p className="text-blue-200 text-sm">Satisfaction</p>
+                        <p className="text-blue-200 text-sm">{t('auth.login.stats.satisfaction')}</p>
                     </div>
                 </div>
             </div>

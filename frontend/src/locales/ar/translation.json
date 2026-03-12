@@ -106,8 +106,16 @@
                 "liveBidding": "مزايدة مباشرة",
                 "liveBiddingDesc": "تحديثات المزاد في الوقت الفعلي",
                 "rareItems": "اربح عناصر نادرة",
-                "rareItemsDesc": "مقتنيات حصرية"
-            }
+                "rareItemsDesc": "مقتنيات حصرية",
+                "securePayments": "مدفوعات آمنة",
+                "securePaymentsDesc": "معاملات محمية لراحة بالك"
+            },
+            "emailPlaceholder": "you@example.com",
+            "passwordPlaceholder": "أدخل كلمة المرور",
+            "resendVerification": "إعادة إرسال بريد التحقق",
+            "resending": "جاري الإرسال...",
+            "verificationEmailSent": "تم إرسال بريد التحقق! يرجى فحص البريد الوارد.",
+            "resendFailed": "فشل في إعادة إرسال بريد التحقق"
         },
         "signup": {
             "title": "إنشاء حساب",
@@ -128,6 +136,12 @@
             "passwordMismatch": "كلمات المرور غير متطابقة",
             "buyer": "مشتري",
             "seller": "بائع",
+            "placeholders": {
+                "name": "الاسم الكامل",
+                "email": "you@example.com",
+                "password": "أنشئ كلمة مرور قوية",
+                "confirmPassword": "أعد إدخال كلمة المرور"
+            },
             "benefitsList": {
                 "dashboard": "لوحة تحكم مخصصة",
                 "dashboardDesc": "تتبع عروضك وفوزك",
@@ -140,9 +154,19 @@
                 "good": "جيدة",
                 "strong": "قوية"
             },
+            "buyerDesc": "شراء العناصر",
+            "sellerDesc": "إدراج المزادات",
             "agreeTerms": "أوافق على الشروط والأحكام",
             "acceptTermsError": "يرجى الموافقة على الشروط والأحكام",
-            "passwordShortError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل"
+            "passwordShortError": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+            "terms": {
+                "prefix": "أوافق على",
+                "and": "و"
+            },
+            "testimonial": {
+                "role": "جامع مقتنيات منذ 2025",
+                "quote": "\"أفضل منصة مزادات استخدمتها. فزت بمقتنيات رائعة بأسعار مميزة!\""
+            }
         },
         "forgotPassword": {
             "title": "نسيت كلمة المرور",
@@ -241,7 +265,6 @@
         "yearMade": "سنة الصنع",
         "location": "الموقع",
         "contact": "التواصل",
-        "reportFraud": "الإبلاغ عن احتيال / عنصر مشبوه",
         "productId": "معرف المنتج",
         "watchers": "المراقبون",
         "placeYourBid": "ضع عرضك",
@@ -265,7 +288,18 @@
         "user": "مستخدم",
         "justNow": "الآن",
         "watch": "متابعة",
-        "unwatch": "إلغاء المتابعة"
+        "unwatch": "إلغاء المتابعة",
+        "sellerCannotBid": "لا يمكنك المزايدة على منتجك.",
+        "cannotBuyOwnProduct": "لا يمكنك شراء منتجك.",
+        "buyNowConfirm": "هل تريد شراء هذا المنتج فوراً بمبلغ ${{price}}؟",
+        "reportPrompt": "يرجى إدخال سبب الإبلاغ (احتيال، إساءة، منتج مزيف):",
+        "reportSubmitted": "تم إرسال البلاغ إلى فريق الثقة والسلامة. رقم الحالة: #REPORT-992",
+        "bidPlaceFailed": "فشل تقديم العرض",
+        "buyNowFailed": "فشل الشراء الفوري",
+        "auctionExtended": "تم تمديد وقت المزاد بسبب عرض في اللحظة الأخيرة!",
+        "quickBid500": "+$500",
+        "quickBid1000": "+$1000",
+        "newBidder": "مزايد جديد"
     },
     "dashboard": {
         "title": "لوحة التحكم",
@@ -296,6 +330,7 @@
             "pause": "إيقاف مؤقت",
             "cancel": "إلغاء",
             "reasonRequired": "السبب مطلوب",
+            "reasonPlaceholder": "أدخل مبرر/سبب الإجراء...",
             "confirm": "تأكيد",
             "pauseSuccess": "تم إيقاف المزاد بنجاح.",
             "cancelSuccess": "تم إلغاء المزاد بنجاح."

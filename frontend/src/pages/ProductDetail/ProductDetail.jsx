@@ -421,11 +421,7 @@ const ProductDetail = () => {
                                                     <span className="text-blue-500 text-lg" title={t('product.verifiedSeller')}>🛡️</span>
                                                 )}
                                             </p>
-                                            <div className="flex items-center gap-1 mt-1">
-                                                <span className="text-yellow-400">⭐</span>
-                                                <span className="text-sm font-medium">{product.sellerRating}</span>
-                                                <span className="text-xs text-gray-400">/ 5.0</span>
-                                            </div>
+                                          
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 mb-1">{t('product.condition')}</p>
@@ -452,7 +448,6 @@ const ProductDetail = () => {
                                         onClick={handleReport}
                                         className="mt-4 text-xs text-gray-400 hover:text-red-500 underline flex items-center gap-1 transition-colors"
                                     >
-                                        <span>🚩</span> {t('product.reportFraud')}
                                     </button>
                                 </div>
                             </div>

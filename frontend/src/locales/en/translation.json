@@ -111,8 +111,16 @@
         "liveBidding": "Live Bidding",
         "liveBiddingDesc": "Real-time auction updates",
         "rareItems": "Win Rare Items",
-        "rareItemsDesc": "Exclusive collectibles"
-      }
+        "rareItemsDesc": "Exclusive collectibles",
+        "securePayments": "Secure Payments",
+        "securePaymentsDesc": "Protected transactions for peace of mind"
+      },
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Enter your password",
+      "resendVerification": "Resend Verification Email",
+      "resending": "Sending...",
+      "verificationEmailSent": "Verification email sent! Please check your inbox.",
+      "resendFailed": "Failed to resend verification email"
     },
     "signup": {
       "title": "Create Account",
@@ -137,6 +145,12 @@
       "passwordMismatch": "Passwords do not match",
       "buyer": "Buyer",
       "seller": "Seller",
+      "placeholders": {
+        "name": "John Doe",
+        "email": "you@example.com",
+        "password": "Create a strong password",
+        "confirmPassword": "Re-enter your password"
+      },
       "benefitsList": {
         "dashboard": "Personalized Dashboard",
         "dashboardDesc": "Track your bids and wins",
@@ -149,9 +163,15 @@
         "good": "Good",
         "strong": "Strong"
       },
+      "buyerDesc": "Purchase items",
+      "sellerDesc": "List auctions",
       "agreeTerms": "I agree to the Terms and Conditions",
       "acceptTermsError": "Please accept the terms and conditions",
-      "passwordShortError": "Password must be at least 6 characters long"
+      "passwordShortError": "Password must be at least 6 characters long",
+      "terms": {
+        "prefix": "I agree to the",
+        "and": "and"
+      }
     },
     "forgotPassword": {
       "title": "Forgot Password",
@@ -250,7 +270,6 @@
     "yearMade": "Year Made",
     "location": "Location",
     "contact": "Contact",
-    "reportFraud": "Report Fraud / Suspicious Item",
     "productId": "Product ID",
     "watchers": "Watchers",
     "placeYourBid": "Place Your Bid",
@@ -274,7 +293,18 @@
     "user": "User",
     "justNow": "Just now",
     "watch": "Watch",
-    "unwatch": "Unwatch"
+    "unwatch": "Unwatch",
+    "sellerCannotBid": "You cannot bid on your own product.",
+    "cannotBuyOwnProduct": "You cannot buy your own product.",
+    "buyNowConfirm": "Buy this item immediately for ${{price}}?",
+    "reportPrompt": "Please enter reason for reporting (Fraud, Abuse, Fake Item):",
+    "reportSubmitted": "Report submitted to Trust & Safety team. Case ID: #REPORT-992",
+    "bidPlaceFailed": "Failed to place bid",
+    "buyNowFailed": "Buy Now failed",
+    "auctionExtended": "Auction time extended due to last-minute bid!",
+    "quickBid500": "+$500",
+    "quickBid1000": "+$1000",
+    "newBidder": "New Bidder"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -305,6 +335,7 @@
       "pause": "Pause",
       "cancel": "Cancel",
       "reasonRequired": "Reason is required",
+      "reasonPlaceholder": "Enter justification/reason...",
       "confirm": "Confirm",
       "pauseSuccess": "Auction paused successfully.",
       "cancelSuccess": "Auction cancelled successfully."
