@@ -1,7 +1,7 @@
 import Auction from '../models/Auction.js';
 import Bid from '../models/Bid.js';
 import Notification from '../models/Notification.js';
-import { uploadMultipleToCloudinary, deleteFromCloudinary } from '../middleware/upload.js';
+import { uploadMultipleToS3, deleteFromS3 } from '../middleware/upload.js';
 import { getIO } from '../config/socket.js';
 import { notifyNewAuction } from '../services/notificationService.js';
 
@@ -155,7 +155,7 @@ export const createAuction = async (req, res) => {
             duration
         } = req.body;
 
-        // Upload images to Cloudinary
+        // Upload images to S3
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({
                 success: false,
@@ -163,7 +163,7 @@ export const createAuction = async (req, res) => {
             });
         }
 
-        const imageUrls = await uploadMultipleToCloudinary(req.files, 'auctions');
+        const imageUrls = await uploadMultipleToS3(req.files, 'auctions');
 
         // Calculate auction end time
         const durationDays = parseInt(duration) || 7;
@@ -281,9 +281,9 @@ export const deleteAuction = async (req, res) => {
             });
         }
 
-        // Delete images from Cloudinary
+        // Delete images from S3
         for (const imageUrl of auction.images) {
-            await deleteFromCloudinary(imageUrl);
+            await deleteFromS3(imageUrl);
         }
 
         await auction.deleteOne();

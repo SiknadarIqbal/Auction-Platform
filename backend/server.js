@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import { configureSocket } from './config/socket.js';
 import connectDB from './config/db.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
-import './config/cloudinary.js';
+import './config/s3.js';
 import startCronJobs from './services/cronService.js';
 import authRoutes from './routes/auth.js';
 import auctionRoutes from './routes/auctions.js';

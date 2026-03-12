@@ -898,6 +898,7 @@ const Dashboard = () => {
                                                                 src={auction.images[0]}
                                                                 alt={auction.title}
                                                                 className="w-20 h-20 object-cover rounded-lg border-2 border-gray-200"
+                                                                onError={(e) => console.error(`Image failed: ${auction.images[0]}`)}
                                                             />
                                                         )}
                                                         <div className="flex-1">
@@ -960,7 +961,7 @@ const Dashboard = () => {
                                                             <td className="px-6 py-4 whitespace-nowrap">
                                                                 <div className="flex items-center">
                                                                     <div className="h-10 w-10 flex-shrink-0">
-                                                                        <img className="h-10 w-10 rounded-lg object-cover border" src={auction.images[0]} alt="" />
+                                                                        <img className="h-10 w-10 rounded-lg object-cover border" src={auction.images[0]} alt="" onError={(e) => console.error(`Image failed: ${auction.images[0]}`)} />
                                                                     </div>
                                                                     <div className="ml-4">
                                                                         <div className="text-sm font-medium text-gray-900">{auction.title}</div>
@@ -1045,6 +1046,7 @@ const Dashboard = () => {
                                                             src={item.images[0]}
                                                             alt={item.title}
                                                             className="w-full h-full object-cover"
+                                                            onError={(e) => console.error(`Image failed: ${item.images[0]}`)}
                                                         />
                                                     </div>
                                                 )}
@@ -1160,6 +1162,7 @@ const Dashboard = () => {
                                                             src={bid.auctionId.images[0]}
                                                             alt={bid.auctionId.title}
                                                             className="w-full h-full object-cover"
+                                                            onError={(e) => console.error(`Image failed: ${bid.auctionId.images[0]}`)}
                                                         />
                                                     </div>
                                                 )}
@@ -1224,6 +1227,7 @@ const Dashboard = () => {
                                                                 src={bid.auctionId.images[0]}
                                                                 alt={bid.auctionId.title}
                                                                 className="w-16 h-16 object-cover rounded-lg border-2 border-gray-200"
+                                                                onError={(e) => console.error(`Image failed: ${bid.auctionId.images[0]}`)}
                                                             />
                                                         )}
                                                     </td>

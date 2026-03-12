@@ -1,63 +1,110 @@
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import cloudinary from '../config/cloudinary.js';
+import multerS3 from 'multer-s3';
+import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import s3 from '../config/s3.js';
+import path from 'path';
 
-// Configure Storage
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'auction_products', // Cloudinary folder name
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
-        transformation: [{ width: 800, height: 600, crop: 'limit' }] // Optional resizing
+const bucketName = process.env.AWS_BUCKET_NAME;
+
+// Configure Storage for S3
+const storage = multerS3({
+    s3: s3,
+    bucket: bucketName,
+    metadata: function (req, file, cb) {
+        cb(null, {
+            fieldName: file.fieldname,
+            originalName: file.originalname
+        });
+    },
+    key: function (req, file, cb) {
+        const folder = req.body.folder || 'uploads';
+        const filename = `${folder}/${Date.now()}-${file.originalname}`;
+        cb(null, filename);
     }
 });
 
-const upload = multer({ storage: storage });
+// File filter for allowed formats
+const fileFilter = (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (allowedMimes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only JPEG, PNG, and WebP are allowed.'));
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
 
 // Helper for single manual upload
-export const uploadToCloudinary = async (file, folder) => {
+export const uploadToS3 = async (file, folder) => {
     try {
         if (!file) return null;
-        if (file.path && file.path.includes('cloudinary')) return file.path;
+        if (file.location) return file.location; // Already uploaded
 
-        const result = await cloudinary.uploader.upload(file.path, { folder });
-        return result.secure_url;
+        const key = `${folder}/${Date.now()}-${file.originalname}`;
+        const command = new PutObjectCommand({
+            Bucket: bucketName,
+            Key: key,
+            Body: file.buffer,
+            ContentType: file.mimetype
+        });
+
+        await s3.send(command);
+        return `https://${bucketName}.s3.${process.env.AWS_REGION || 'us-east-1'}.amazonaws.com/${key}`;
     } catch (error) {
-        console.error("Error uploading to Cloudinary:", error);
+        console.error("Error uploading to S3:", error);
         throw error;
     }
 };
 
 // Helper for multiple manual uploads
-export const uploadMultipleToCloudinary = async (files, folder) => {
+export const uploadMultipleToS3 = async (files, folder) => {
     try {
-        const promises = files.map(file => {
-            if (file.path && file.path.includes('cloudinary')) return Promise.resolve(file.path);
-            return cloudinary.uploader.upload(file.path, { folder });
+        const uploadPromises = files.map(async (file) => {
+            if (file.location) return file.location;
+
+            const key = `${folder}/${Date.now()}-${file.originalname}`;
+            const command = new PutObjectCommand({
+                Bucket: bucketName,
+                Key: key,
+                Body: file.buffer,
+                ContentType: file.mimetype
+            });
+
+            await s3.send(command);
+            return `https://${bucketName}.s3.${process.env.AWS_REGION || 'us-east-1'}.amazonaws.com/${key}`;
         });
 
-        const results = await Promise.all(promises);
-        return results.map(res => res.secure_url || res);
+        const results = await Promise.all(uploadPromises);
+        return results;
     } catch (error) {
-        console.error("Error uploading multiple to Cloudinary:", error);
+        console.error("Error uploading multiple to S3:", error);
         throw error;
     }
 };
 
-// Helper to delete from Cloudinary
-export const deleteFromCloudinary = async (publicId) => {
+// Helper to delete from S3
+export const deleteFromS3 = async (fileUrl) => {
     try {
-        if (!publicId) return;
-        let id = publicId;
-        if (publicId.includes('cloudinary.com')) {
-            const parts = publicId.split('/');
-            const filename = parts[parts.length - 1];
-            const folder = parts[parts.length - 2];
-            id = `${folder}/${filename.split('.')[0]}`;
-        }
-        await cloudinary.uploader.destroy(id);
+        if (!fileUrl) return;
+
+        // Extract key from S3 URL
+        const url = new URL(fileUrl);
+        const key = url.pathname.substring(1); // Remove leading slash
+
+        const command = new DeleteObjectCommand({
+            Bucket: bucketName,
+            Key: key
+        });
+
+        await s3.send(command);
+        console.log(`✅ Deleted from S3: ${key}`);
     } catch (error) {
-        console.error("Error deleting from Cloudinary:", error);
+        console.error("Error deleting from S3:", error);
     }
 };
 

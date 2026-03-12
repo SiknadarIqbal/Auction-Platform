@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import Notification from '../models/Notification.js';
 import Auction from '../models/Auction.js';
 import AuditLog from '../models/AuditLog.js';
-import { uploadToCloudinary } from '../middleware/upload.js';
+import { uploadToS3 } from '../middleware/upload.js';
 
 // Get current user profile
 export const getProfile = async (req, res) => {
@@ -32,7 +32,7 @@ export const updateProfile = async (req, res) => {
 
         // Handle avatar upload if present
         if (req.file) {
-            const avatarUrl = await uploadToCloudinary(req.file, 'avatars');
+            const avatarUrl = await uploadToS3(req.file, 'avatars');
             user.avatar = avatarUrl;
         }
 

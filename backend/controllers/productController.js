@@ -49,7 +49,7 @@ export const createProduct = async (req, res) => {
         // Handle Image Uploads
         let images = [];
         if (req.files) {
-            images = req.files.map(file => file.path); // Cloudinary returns URL in 'path'
+            images = req.files.map(file => file.location); // S3 returns URL in 'location'
         }
 
         let auctionEndDate = endDate;

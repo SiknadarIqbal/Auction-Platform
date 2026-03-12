@@ -90,6 +90,10 @@ const ProductCard = ({ product }) => {
                             src={images[currentImageIndex]}
                             alt={`${product.name} - Image ${currentImageIndex + 1}`}
                             className="w-full h-full object-cover transition-opacity duration-300"
+                            onError={(e) => {
+                                console.error(`Image failed to load: ${images[currentImageIndex]}`);
+                                e.target.style.display = 'none';
+                            }}
                         />
                     ) : (
                         <div className="text-8xl transform group-hover:scale-110 transition-transform duration-300">
