@@ -91,8 +91,9 @@ const ProductCard = ({ product }) => {
                             alt={`${product.name} - Image ${currentImageIndex + 1}`}
                             className="w-full h-full object-cover transition-opacity duration-300"
                             onError={(e) => {
-                                console.error(`Image failed to load: ${images[currentImageIndex]}`);
-                                e.target.style.display = 'none';
+                                // Fallback to a generic placeholder image if the source fails (e.g., old Cloudinary demo URLs)
+                                e.target.onerror = null;
+                                e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
                             }}
                         />
                     ) : (
