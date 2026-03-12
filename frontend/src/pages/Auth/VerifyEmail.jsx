@@ -30,7 +30,7 @@ const VerifyEmail = () => {
                 if (response.data.success) {
                     setStatus('success');
                     setMessage(t('auth.verifyEmail.success'));
-                    setTimeout(() => navigate('/login'), 3000);
+                    setTimeout(() => navigate('/agreement'), 3000);
                 } else {
                     setStatus('error');
                     setMessage(response.data.message || t('auth.verifyEmail.failed'));

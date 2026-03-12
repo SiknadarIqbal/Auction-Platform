@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaShieldAlt, FaHandshake, FaUserCheck, FaArrowRight, FaGlobe } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContext";
 
 const Agreement = ({ onAccept }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const [agreed, setAgreed] = useState(false);
     const { changeLanguage, isRTL } = useLanguage();
     const isRtl = isRTL;
@@ -14,7 +15,8 @@ const Agreement = ({ onAccept }) => {
     const handleAgree = () => {
         localStorage.setItem("hasAgreed", "true");
         if (onAccept) onAccept();
-        navigate("/login");
+        const nextPath = location.state?.from?.pathname || "/login";
+        navigate(nextPath, { replace: true });
     };
 
     return (
