@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaUniversity, FaSearch, FaBell, FaChartPie, FaBars, FaTimes, FaLock, FaUserPlus, FaUser, FaSignOutAlt, FaGlobe, FaCog } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 import { userService } from "../services/userService";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+    const { showSuccess } = useNotification();
     const { t } = useTranslation();
     const { currentLanguage, changeLanguage, isRTL } = useLanguage();
     const isRtl = isRTL;
@@ -26,6 +28,12 @@ const Navbar = () => {
             .then((data) => setNotificationCount(data.unreadCount ?? 0))
             .catch(() => setNotificationCount(0));
     }, [user]);
+
+    // Handle logout with notification
+    const handleLogout = async () => {
+        await logout();
+        showSuccess("You have been logged out successfully.");
+    };
 
     return (
         <nav className="bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 text-white shadow-2xl sticky top-0 z-50 backdrop-blur-lg border-b border-slate-700">
@@ -114,16 +122,19 @@ const Navbar = () => {
                         {/* User Menu - Desktop */}
                         <div className="hidden lg:flex items-center gap-3">
                             {user ? (
-                                <Link to="/dashboard?tab=settings" className="flex items-center gap-3 group">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg border-2 border-slate-600 group-hover:border-blue-400 transition-all duration-200">
-                                            {user.name ? user.name.charAt(0).toUpperCase() : <FaUser />}
+                                <>
+                                    <Link to="/dashboard?tab=settings" className="flex items-center gap-3 group">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg border-2 border-slate-600 group-hover:border-blue-400 transition-all duration-200">
+                                                {user.name ? user.name.charAt(0).toUpperCase() : <FaUser />}
+                                            </div>
+                                            <span className="text-white font-medium hidden xl:block group-hover:text-blue-300 transition-colors duration-200">
+                                                {user.name}
+                                            </span>
                                         </div>
-                                        <span className="text-white font-medium hidden xl:block group-hover:text-blue-300 transition-colors duration-200">
-                                            {user.name}
-                                        </span>
-                                    </div>
-                                </Link>
+                                    </Link>
+
+                                </>
                             ) : (
                                 <>
                                     <Link
@@ -175,6 +186,7 @@ const Navbar = () => {
                                         <span className="font-semibold text-white">{user.name}</span>
                                         <FaCog className="text-slate-400 ml-auto" />
                                     </Link>
+
                                 </div>
                             ) : (
                                 <>

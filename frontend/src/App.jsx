@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "r
 import { LanguageProvider } from "./context/LanguageContext";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import ToastContainer from "./Components/ToastContainer";
 import Frontpage from "./pages/Frontpage/Frontpage";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -33,6 +34,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToastContainer />
       {shouldShowNavbar && <Navbar />}
       <Routes>
         <Route path="/agreement" element={<Agreement />} />

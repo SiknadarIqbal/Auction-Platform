@@ -6,6 +6,7 @@ import { FaBox, FaGavel, FaTrophy, FaTimesCircle, FaBroadcastTower, FaUserShield
 import { categoryAPI } from "../../services/api";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { useNotification } from "../../context/NotificationContext";
 import { auctionService } from "../../services/auctionService";
 import { bidService } from "../../services/bidService";
 import { userService } from '../../services/userService';
@@ -55,6 +56,7 @@ const BidCountdown = ({ endTime, status }) => {
 const Dashboard = () => {
     const { t } = useTranslation();
     const [searchParams] = useSearchParams();
+    const { showSuccess, showError, showWarning, showInfo, showConfirm } = useNotification();
 
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState(() => {
@@ -356,10 +358,10 @@ const Dashboard = () => {
         try {
             if (categoryModal.mode === 'create') {
                 await categoryAPI.create(categoryForm);
-                alert("Category created successfully");
+                showSuccess("Category created successfully");
             } else {
                 await categoryAPI.update(categoryModal.data._id, categoryForm);
-                alert("Category updated successfully");
+                showSuccess("Category updated successfully");
             }
             setCategoryModal({ isOpen: false, mode: 'create', data: null });
             setCategoryForm({ name: '', description: '', icon: 'FaBox' });
@@ -367,25 +369,26 @@ const Dashboard = () => {
         } catch (error) {
             const msg = error.response?.data?.message || "Error saving category";
             if (msg === "Invalid or expired token." || msg === "Access denied. No token provided.") {
-                alert("Session expired. Please login again.");
+                showError("Session expired. Please login again.");
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('user');
-                window.location.href = '/login';
+                setTimeout(() => window.location.href = '/login', 1500);
                 return;
             }
-            alert(msg);
+            showError(msg);
         }
     };
 
     const handleDeleteCategory = async (id) => {
-        if (window.confirm("Are you sure you want to delete this category?")) {
+        const confirmed = await showConfirm("Are you sure you want to delete this category?");
+        if (confirmed) {
             try {
                 await categoryAPI.delete(id);
-                alert("Category deleted successfully");
+                showSuccess("Category deleted successfully");
                 fetchCategories();
             } catch (error) {
-                alert(error.response?.data?.message || "Error deleting category");
+                showError(error.response?.data?.message || "Error deleting category");
             }
         }
     };
@@ -437,7 +440,7 @@ const Dashboard = () => {
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if (passwordModal.newPassword !== passwordModal.confirmPassword) {
-            alert("New passwords do not match");
+            showError("New passwords do not match");
             return;
         }
 
@@ -449,7 +452,7 @@ const Dashboard = () => {
             });
 
             if (res.success) {
-                alert("Password updated successfully");
+                showSuccess("Password updated successfully");
                 setPasswordModal({
                     isOpen: false,
                     currentPassword: '',
@@ -458,25 +461,26 @@ const Dashboard = () => {
                 });
             }
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to update password");
+            showError(error.response?.data?.message || "Failed to update password");
         } finally {
             setPasswordLoading(false);
         }
     };
 
     const handleDeleteAccount = async () => {
-        if (window.confirm("WARNING: Are you sure you want to delete your account? This action is permanent and cannot be undone.")) {
+        const confirmed = await showConfirm("WARNING: Are you sure you want to delete your account? This action is permanent and cannot be undone.");
+        if (confirmed) {
             try {
                 const res = await userService.deleteAccount();
                 if (res.success) {
-                    alert("Account deleted successfully.");
+                    showSuccess("Account deleted successfully.");
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                     localStorage.removeItem('user');
-                    window.location.href = '/';
+                    setTimeout(() => window.location.href = '/', 1500);
                 }
             } catch (error) {
-                alert(error.response?.data?.message || "Failed to delete account");
+                showError(error.response?.data?.message || "Failed to delete account");
             }
         }
     };
@@ -498,7 +502,7 @@ const Dashboard = () => {
             const filesToAdd = files.slice(0, availableSlots);
 
             if (filesToAdd.length < files.length) {
-                alert(`You can only upload up to 10 images. ${files.length - filesToAdd.length} file(s) were not added.`);
+                showWarning(`You can only upload up to 10 images. ${files.length - filesToAdd.length} file(s) were not added.`);
             }
 
             const newPreviews = filesToAdd.map(file => URL.createObjectURL(file));
@@ -558,7 +562,7 @@ const Dashboard = () => {
             }
 
             if (response.success) {
-                alert(editingProduct ? "Auction updated successfully!" : "Auction created successfully! It is now live on the website.");
+                showSuccess(editingProduct ? "Auction updated successfully!" : "Auction created successfully! It is now live on the website.");
                 setShowAddProduct(false);
                 setEditingProduct(null);
                 setNewProduct({
@@ -608,16 +612,16 @@ const Dashboard = () => {
 
                 setFormErrors(backendErrors);
                 // Also show alert for visibility
-                alert("Please correct the errors in the form.");
+                showError("Please correct the errors in the form.");
                 return;
             }
 
             const msg = error.response?.data?.message || "Error creating auction";
             if (msg === "Invalid or expired token." || (error.response?.status === 401)) {
-                alert("Session expired. Please login again.");
+                showError("Session expired. Please login again.");
                 return;
             }
-            alert(msg);
+            showError(msg);
         }
     };
 
@@ -625,7 +629,7 @@ const Dashboard = () => {
 
     const handleEditClick = (auction) => {
         if (auction.totalBids > 0) {
-            alert("This auction cannot be edited because bids have already been placed.");
+            showError("This auction cannot be edited because bids have already been placed.");
             return;
         }
         setEditingProduct(auction);
@@ -649,15 +653,16 @@ const Dashboard = () => {
     };
 
     const handleDeleteProduct = async (id) => {
-        if (window.confirm("Are you sure you want to delete this auction? This action cannot be undone.")) {
+        const confirmed = await showConfirm("Are you sure you want to delete this auction? This action cannot be undone.");
+        if (confirmed) {
             try {
                 const response = await auctionService.deleteAuction(id);
                 if (response.success) {
-                    alert("Auction deleted successfully.");
+                    showSuccess("Auction deleted successfully.");
                     fetchMyAuctions();
                 }
             } catch (error) {
-                alert(error.response?.data?.message || "Error deleting auction");
+                showError(error.response?.data?.message || "Error deleting auction");
             }
         }
     };
@@ -690,7 +695,7 @@ const Dashboard = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.productName')} *</label>
-                                                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g., Rolex Submariner 1960s" />
+                                                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: Rolex Watch" />
                                                 {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                                             </div>
                                             <div>
@@ -715,7 +720,7 @@ const Dashboard = () => {
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.buyNowPrice')} <span className="text-gray-400 font-normal">({t('dashboard.products.optional')})</span></label>
-                                                <input type="number" name="buyNowPrice" value={newProduct.buyNowPrice} onChange={handleInputChange} min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.buyNowPrice ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g., 15000" />
+                                                <input type="number" name="buyNowPrice" value={newProduct.buyNowPrice} onChange={handleInputChange} min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.buyNowPrice ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: 15000" />
                                                 {formErrors.buyNowPrice && <p className="text-red-500 text-xs mt-1">{formErrors.buyNowPrice}</p>}
                                             </div>
                                             <div>
@@ -733,17 +738,17 @@ const Dashboard = () => {
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.yearMade')} *</label>
-                                                <input type="text" name="yearMade" value={newProduct.yearMade} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.yearMade ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g., 1965" />
+                                                <input type="text" name="yearMade" value={newProduct.yearMade} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.yearMade ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: 2026" />
                                                 {formErrors.yearMade && <p className="text-red-500 text-xs mt-1">{formErrors.yearMade}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.location')} *</label>
-                                                <input type="text" name="location" value={newProduct.location} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.location ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g., New York, USA" />
+                                                <input type="text" name="location" value={newProduct.location} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.location ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: UAE" />
                                                 {formErrors.location && <p className="text-red-500 text-xs mt-1">{formErrors.location}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.contactNumber')} *</label>
-                                                <input type="text" name="contactNumber" value={newProduct.contactNumber} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.contactNumber ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g., +1 234 567 890" />
+                                                <input type="text" name="contactNumber" value={newProduct.contactNumber} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.contactNumber ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: +1 234 567 890" />
                                                 {formErrors.contactNumber && <p className="text-red-500 text-xs mt-1">{formErrors.contactNumber}</p>}
                                             </div>
                                             <div>
@@ -1918,13 +1923,13 @@ const Dashboard = () => {
                                     </div>
                                     <button
                                         onClick={async () => {
-                                            if (window.confirm(t('common.confirmSignOut'))) {
+                                            const confirmed = await showConfirm(t('common.confirmSignOut'));
+                                            if (confirmed) {
                                                 localStorage.removeItem('accessToken');
                                                 localStorage.removeItem('refreshToken');
                                                 localStorage.removeItem('user');
                                                 // Also try calling context logout just in case
                                                 try { await logout(); } catch (e) { }
-
                                                 window.location.href = '/';
                                             }
                                         }}

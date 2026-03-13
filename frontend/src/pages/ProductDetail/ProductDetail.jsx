@@ -5,12 +5,14 @@ import { bidService } from "../../services/bidService";
 import { useAuth } from "../../context/AuthContext";
 import { joinAuctionRoom, leaveAuctionRoom, getSocket } from "../../services/socketService";
 import { useTranslation } from "react-i18next";
+import { useNotification } from "../../context/NotificationContext";
 
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { showInfo, showError, showSuccess, showConfirm } = useNotification();
 
     const { user } = useAuth();
     const [product, setProduct] = useState(null);
@@ -88,7 +90,7 @@ const ProductDetail = () => {
         joinAuctionRoom(id);
         const socket = getSocket();
 
-        socket.on('bid_update', (data) => {
+        socket.on('bid_update', async (data) => {
             setProduct(prev => {
                 if (!prev) return prev;
                 const newBid = data.currentHighestBid;
@@ -100,16 +102,19 @@ const ProductDetail = () => {
                     minBid: newBid + increment,
                     totalBids: data.totalBids,
                     bids: data.totalBids,
-                    highestBidderId: { _id: data.highestBidderId } // Update current winner locally
+                    highestBidderId: { _id: data.highestBidderId }
                 };
             });
 
-            // Add new bid to history
-            setBidHistory(prev => [{
-                bidderName: data.bidderName || "New Bidder",
-                bidAmount: data.currentHighestBid,
-                timestamp: new Date().toISOString()
-            }, ...prev]);
+            // Fetch latest bid history from backend for real-time accuracy
+            try {
+                const bidsData = await bidService.getBidHistory(id);
+                if (bidsData.success) {
+                    setBidHistory(bidsData.data);
+                }
+            } catch (err) {
+                // Optionally handle error
+            }
         });
 
         socket.on('auction_ended', (data) => {
@@ -129,7 +134,7 @@ const ProductDetail = () => {
                 extensionCount: data.extensionCount
             }));
             // Show auto-extension toast
-            alert("Auction time extended by 5 minutes due to last minute bid!");
+            showInfo("Auction time extended by 5 minutes due to last minute bid!");
         });
 
         return () => {
@@ -194,7 +199,7 @@ const ProductDetail = () => {
         e.preventDefault();
 
         if (isOffline) {
-            alert("Connection lost. Please check your network and try again.");
+            showError("Connection lost. Please check your network and try again.");
             return;
         }
 
@@ -205,7 +210,7 @@ const ProductDetail = () => {
 
         // Prevent sellers from bidding on their own items
         if (user._id === product.sellerId?._id) {
-            alert("You cannot bid on your own product.");
+            showError("You cannot bid on your own product.");
             return;
         }
 
@@ -219,7 +224,7 @@ const ProductDetail = () => {
                 setBidAmount("");
             }
         } catch (err) {
-            alert(err.response?.data?.message || "Failed to place bid");
+            showError(err.response?.data?.message || "Failed to place bid");
         } finally {
             setIsSubmitting(false);
         }
@@ -232,27 +237,25 @@ const ProductDetail = () => {
         }
 
         if (isSeller) {
-            alert("You cannot buy your own product.");
+            showError("You cannot buy your own product.");
             return;
         }
 
-        if (confirm(`Buy this item immediately for $${product.buyNowPrice.toLocaleString()}?`)) {
+        const confirmed = await showConfirm(`Buy this item immediately for $${product.buyNowPrice.toLocaleString()}?`);
+        if (confirmed) {
             try {
                 const response = await bidService.buyNow(id);
                 if (response.success) {
                     setAuctionEnded(true);
                 }
             } catch (err) {
-                alert(err.response?.data?.message || "Buy Now failed");
+                showError(err.response?.data?.message || "Buy Now failed");
             }
         }
     };
 
     const handleReport = () => {
-        const reason = prompt("Please enter reason for reporting (Fraud, Abuse, Fake Item):");
-        if (reason) {
-            alert("Report submitted to Trust & Safety team. Case ID: #REPORT-992");
-        }
+        showSuccess("Report submitted to Trust & Safety team. Case ID: #REPORT-992");
     };
 
 
