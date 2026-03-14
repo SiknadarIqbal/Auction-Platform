@@ -90,7 +90,7 @@ const ProductDetail = () => {
         joinAuctionRoom(id);
         const socket = getSocket();
 
-        socket.on('bid_update', async (data) => {
+        const handleBidUpdate = async (data) => {
             setProduct(prev => {
                 if (!prev) return prev;
                 const newBid = data.currentHighestBid;
@@ -113,11 +113,11 @@ const ProductDetail = () => {
                     setBidHistory(bidsData.data);
                 }
             } catch (err) {
-                // Optionally handle error
+                console.error('Bid history refresh failed:', err);
             }
-        });
+        };
 
-        socket.on('auction_ended', (data) => {
+        const handleAuctionEnded = (data) => {
             setAuctionEnded(true);
             setProduct(prev => ({
                 ...prev,
@@ -125,25 +125,28 @@ const ProductDetail = () => {
                 winnerId: data.winnerId,
                 finalPrice: data.finalPrice
             }));
-        });
+        };
 
-        socket.on('auction_extended', (data) => {
+        const handleAuctionExtended = (data) => {
             setProduct(prev => ({
                 ...prev,
                 auctionEndTime: data.newEndTime,
                 extensionCount: data.extensionCount
             }));
-            // Show auto-extension toast
-            showInfo("Auction time extended by 5 minutes due to last minute bid!");
-        });
+            showInfo('Auction time extended by 5 minutes due to last minute bid!');
+        };
+
+        socket.on('bid_update', handleBidUpdate);
+        socket.on('auction_ended', handleAuctionEnded);
+        socket.on('auction_extended', handleAuctionExtended);
 
         return () => {
             leaveAuctionRoom(id);
-            socket.off('bid_update');
-            socket.off('auction_ended');
-            socket.off('auction_extended');
+            socket.off('bid_update', handleBidUpdate);
+            socket.off('auction_ended', handleAuctionEnded);
+            socket.off('auction_extended', handleAuctionExtended);
         };
-    }, [id]);
+    }, [id, showInfo]);
 
     // Live Countdown Logic
     React.useEffect(() => {
