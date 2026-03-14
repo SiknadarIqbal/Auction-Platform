@@ -2,12 +2,30 @@ import io from "socket.io-client";
 
 let socket;
 
+const resolveSocketUrl = () => {
+  if (import.meta.env.VITE_SOCKET_URL) {
+    return import.meta.env.VITE_SOCKET_URL;
+  }
+
+  // If API URL includes /api, strip it for websocket endpoint (e.g. http://localhost:5000/api)
+  const apiUrl = import.meta.env.VITE_API_URL;
+  if (apiUrl) {
+    try {
+      const url = new URL(apiUrl);
+      const cleanedPath = url.pathname.replace(/\/api\/?$/, '');
+      return `${url.protocol}//${url.host}${cleanedPath || ''}`;
+    } catch (err) {
+      console.warn('Invalid VITE_API_URL for socket, falling back to origin:', err);
+      return apiUrl.replace(/\/api\/?$/, '');
+    }
+  }
+
+  return typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000';
+};
+
 export const connectSocket = () => {
   if (!socket) {
-    const socketUrl =
-      import.meta.env.VITE_SOCKET_URL ||
-      import.meta.env.VITE_API_URL ||
-      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
+    const socketUrl = resolveSocketUrl();
 
     socket = io(socketUrl, {
       path: '/socket.io',
