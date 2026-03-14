@@ -315,7 +315,25 @@ const Dashboard = () => {
                 setIsSidebarOpen(true);
             }
         };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
+
+    useEffect(() => {
+        if (isSidebarOpen && window.innerWidth < 768) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isSidebarOpen]);
+
     const [showAddProduct, setShowAddProduct] = useState(false);
     const [newProduct, setNewProduct] = useState({
         name: "",
@@ -1778,6 +1796,9 @@ const Dashboard = () => {
                                     } else if (notif.type === 'sale') {
                                         Icon = FaCheckCircle;
                                         iconColor = "bg-green-100 text-green-600";
+                                    } else if (notif.type === 'bid_placed') {
+                                        Icon = FaGavel;
+                                        iconColor = "bg-blue-100 text-blue-600";
                                     } else if (notif.type === 'outbid') {
                                         Icon = FaGavel;
                                         iconColor = "bg-orange-100 text-orange-600";
@@ -1806,6 +1827,12 @@ const Dashboard = () => {
                                         }
                                         const key = `dashboard.notifications.types.${notif.type}`;
                                         const translated = t(key, params);
+
+                                        // Win notifications should include title+price params; otherwise fall back to stored message
+                                        if (notif.type === 'win' && (!params.title || !params.price)) {
+                                            return notif.message;
+                                        }
+
                                         // If key not found (returns the key itself), fall back to stored message
                                         return translated === key ? notif.message : translated;
                                     };
@@ -2024,7 +2051,7 @@ const Dashboard = () => {
             )}
 
             {/* Sidebar */}
-            <div className={`${isSidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full md:w-20 md:translate-x-0'} fixed md:sticky top-0 left-0 z-50 bg-white shadow-xl transition-all duration-300 flex flex-col h-screen`}>
+            <div className={`${isSidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full md:w-20 md:translate-x-0'} fixed md:sticky top-0 left-0 z-50 bg-white shadow-xl transition-all duration-300 flex flex-col h-screen max-h-screen overflow-hidden`}>
                 {/* Sidebar Header */}
                 <div className="p-6 border-b border-gray-200">
                     {/* Back to Home Button */}
@@ -2053,7 +2080,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Menu Items */}
-                <nav className="flex-1 p-4 overflow-y-auto">
+                <nav className="flex-1 p-4 overflow-y-auto overscroll-contain touch-pan-y" style={{ WebkitOverflowScrolling: 'touch' }}>
                     <ul className="space-y-2">
                         {menuItems.map((item) => (
                             <li key={item.id}>

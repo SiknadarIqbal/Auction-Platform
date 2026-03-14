@@ -426,6 +426,7 @@
         "info_no_sale": "ℹ️ Your auction \"{{title}}\" ended without a sale.",
         "info_reserve": "ℹ️ The auction for \"{{title}}\" ended. The reserve price was not met.",
         "auction_ending": "⏰ The auction for \"{{title}}\" is ending soon!",
+        "bid_placed": "🔨 You are currently the highest bidder for \"{{title}}\"!",
         "payment_due": "💳 Payment is due for \"{{title}}\". Please complete your purchase.",
         "auction_extended": "⏱️ The auction for \"{{title}}\" has been extended.",
         "auction_paused": "⏸️ The auction for \"{{title}}\" has been paused.",
@@ -496,7 +497,8 @@
     "available": "available",
     "adjustFilters": "Try adjusting your search or filters",
     "select": "Select...",
-    "backHome": "Back to Home"
+    "backHome": "Back to Home",
+    "confirmSignOut": "Are you sure you want to sign out?"
   },
   "time": {
     "days": "days",

@@ -143,9 +143,10 @@ export const placeBid = async (req, res) => {
         // Notify current bidder
         createNotification({
             userId: bidderId,
-            type: 'win',
+            type: 'bid_placed',
             message: `🔨 You are currently the highest bidder for "${auction.title}"!`,
-            auctionId: auction._id
+            auctionId: auction._id,
+            params: { title: auction.title }
         });
 
         res.json({
@@ -229,7 +230,8 @@ export const buyNow = async (req, res) => {
             userId: buyerId,
             type: 'win',
             message: `🎉 You won "${auction.title}" via Buy Now!`,
-            auctionId: auction._id
+            auctionId: auction._id,
+            params: { title: auction.title, price: auction.buyNowPrice }
         });
 
         if (session) await session.commitTransaction();
