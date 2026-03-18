@@ -85,11 +85,14 @@
         "login": "تسجيل الدخول",
         "signup": "إنشاء حساب",
         "logout": "تسجيل الخروج",
+        "logoutSuccess": "تم تسجيل الخروج بنجاح.",
         "markAllRead": "تحديد الكل كمقروء",
         "viewAll": "عرض الكل",
         "noNotifications": "لا توجد إشعارات جديدة"
     },
     "auth": {
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
         "login": {
             "title": "مرحباً بعودتك",
             "subtitle": "تسجيل الدخول إلى حسابك",
@@ -102,6 +105,11 @@
             "signupLink": "سجل هنا",
             "tagline": "بوابتك إلى المقتنيات النادرة والقيمة",
             "whyChoose": "لماذا تختارنا؟",
+            "stats": {
+                "activeUsers": "مستخدم نشط",
+                "itemsSold": "عنصر مباع",
+                "satisfaction": "نسبة الرضا"
+            },
             "features": {
                 "liveBidding": "مزايدة مباشرة",
                 "liveBiddingDesc": "تحديثات المزاد في الوقت الفعلي",
@@ -110,7 +118,7 @@
                 "securePayments": "مدفوعات آمنة",
                 "securePaymentsDesc": "معاملات محمية لراحة بالك"
             },
-            "emailPlaceholder": "you@example.com",
+            "emailPlaceholder": "البريد الإلكتروني",
             "passwordPlaceholder": "أدخل كلمة المرور",
             "resendVerification": "إعادة إرسال بريد التحقق",
             "resending": "جاري الإرسال...",
@@ -138,7 +146,7 @@
             "seller": "بائع",
             "placeholders": {
                 "name": "الاسم الكامل",
-                "email": "you@example.com",
+                "email": "البريد الإلكتروني",
                 "password": "أنشئ كلمة مرور قوية",
                 "confirmPassword": "أعد إدخال كلمة المرور"
             },
@@ -236,6 +244,8 @@
         }
     },
     "product": {
+        "noImage": "الصورة غير متوفرة",
+        "imageAlt": "{{name}} - صورة {{index}}",
         "currentBid": "العرض الحالي",
         "startingBid": "عرض البداية",
         "timeLeft": "الوقت المتبقي",
@@ -253,6 +263,7 @@
         "noBids": "لا توجد عروض بعد",
         "item": "عنصر",
         "items": "عناصر",
+        "loadFailed": "فشل تحميل المزادات. يرجى المحاولة مرة أخرى لاحقاً.",
         "backToAuctions": "العودة إلى المزادات",
         "internetLost": "فقد الاتصال بالإنترنت. تم تعطيل المزايدة.",
         "retry": "إعادة المحاولة",
@@ -291,15 +302,18 @@
         "unwatch": "إلغاء المتابعة",
         "sellerCannotBid": "لا يمكنك المزايدة على منتجك.",
         "cannotBuyOwnProduct": "لا يمكنك شراء منتجك.",
-        "buyNowConfirm": "هل تريد شراء هذا المنتج فوراً بمبلغ ${{price}}؟",
+        "buyNowConfirm": "هل تريد شراء هذا المنتج فوراً بمبلغ {{price}}؟",
         "reportPrompt": "يرجى إدخال سبب الإبلاغ (احتيال، إساءة، منتج مزيف):",
         "reportSubmitted": "تم إرسال البلاغ إلى فريق الثقة والسلامة. رقم الحالة: #REPORT-992",
         "bidPlaceFailed": "فشل تقديم العرض",
         "buyNowFailed": "فشل الشراء الفوري",
         "auctionExtended": "تم تمديد وقت المزاد بسبب عرض في اللحظة الأخيرة!",
-        "quickBid500": "+$500",
-        "quickBid1000": "+$1000",
-        "newBidder": "مزايد جديد"
+        "quickBid500": "+SAR500",
+        "quickBid1000": "+SAR1000",
+        "newBidder": "مزايد جديد",
+        "auctionExtendedMsg": "تم تمديد وقت المزاد بسبب مزايدة في اللحظة الأخيرة!",
+        "quickBid": "+SAR{{amount}}",
+        "userRoleSeller": "أنت البائع"
     },
     "dashboard": {
         "title": "لوحة التحكم",
@@ -333,7 +347,15 @@
             "reasonPlaceholder": "أدخل مبرر/سبب الإجراء...",
             "confirm": "تأكيد",
             "pauseSuccess": "تم إيقاف المزاد بنجاح.",
-            "cancelSuccess": "تم إلغاء المزاد بنجاح."
+            "cancelSuccess": "تم إلغاء المزاد بنجاح.",
+            "auditActions": {
+                "manual_deactivation": "تم تعطيل المستخدم",
+                "reactivate_user": "تم إعادة تفعيل المستخدم",
+                "delete_account": "تم حذف الحساب",
+                "deactivate_user": "تم تعطيل المستخدم",
+                "auction_paused": "تم إيقاف المزاد مؤقتاً",
+                "auction_cancelled": "تم إلغاء المزاد"
+            }
         },
         "products": {
             "title": "أغراضي للبيع",
@@ -345,15 +367,15 @@
             "addFirst": "أضف عنصرك الأول",
             "productName": "اسم المنتج",
             "category": "الفئة",
-            "startingBid": "عرض البداية ($)",
-            "minBid": "الحد الأدنى للعرض ($)",
-            "buyNowPrice": "سعر الشراء الآن ($)",
+            "startingBid": "عرض البداية (SAR)",
+            "minBid": "الحد الأدنى للعرض (SAR)",
+            "buyNowPrice": "سعر الشراء الآن (SAR)",
             "optional": "اختياري",
             "condition": "الحالة",
             "yearMade": "سنة الصنع",
             "location": "الموقع",
             "contactNumber": "رقم التواصل",
-            "reservePrice": "السعر المحتفظ به ($)",
+            "reservePrice": "السعر المحتفظ به (SAR)",
             "duration": "المدة (أيام)",
             "productImages": "صور المنتج",
             "imagesLimit": "حتى 10",
@@ -366,7 +388,42 @@
             "delete": "حذف",
             "status": "الحالة",
             "currentBid": "العرض الحالي",
-            "bids": "العروض"
+            "bids": "العروض",
+            "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا المزاد؟ هذا الإجراء لا يمكن التراجع عنه.",
+            "deleteSuccess": "تم حذف المزاد بنجاح.",
+            "updateSuccess": "تم تحديث المزاد بنجاح!",
+            "createSuccess": "تم إنشاء المزاد بنجاح! هو الآن متاح على الموقع.",
+            "uploadLimitError": "يمكنك تحميل ما يصل إلى 10 صور فقط",
+            "editErrorWithBids": "لا يمكن تعديل هذا المزاد نظرًا لوجود مزايدات بالفعل.",
+            "deleteError": "خطأ في حذف المزاد",
+            "imagesUploaded": "{{count}} / 10 صور تم رفعها",
+            "chooseFile": "اختر الصور",
+            "noFileChosen": "لم يتم اختيار صور",
+            "placeholders": {
+                "productName": "مثل: ساعة رولكس",
+                "startingBid": "10000",
+                "minBid": "10500",
+                "buyNowPrice": "مثل: 15000",
+                "yearMade": "مثل: 2026",
+                "location": "مثل: الإمارات",
+                "contactNumber": "مثل: +1 234 567 890",
+                "reservePrice": "السعر الأدنى المخفي",
+                "description": "وصف مفصل للمنتج..."
+            },
+            "conditions": {
+                "mint": "جديد تماماً",
+                "excellent": "ممتاز",
+                "veryGood": "جيد جداً",
+                "good": "جيد",
+                "fair": "مقبول",
+                "restored": "مجدد"
+            },
+            "durations": {
+                "3days": "3 أيام",
+                "5days": "5 أيام",
+                "7days": "7 أيام",
+                "10days": "10 أيام"
+            }
         },
         "unsold": {
             "title": "العناصر غير المباعة",
@@ -377,7 +434,11 @@
             "title": "المزادات الفائزة",
             "noItems": "لا توجد مزادات فائزة بعد",
             "noItemsSubtitle": "زايد",
-            "finalPrice": "السعر النهائي"
+            "browse": "تصفح المزادات",
+            "finalPrice": "السعر النهائي",
+            "won": "تم الفوز",
+            "callSeller": "اتصل بالبائع",
+            "note": "المواد المدرجة هنا تم الفوز بها من قبلك بنجاح. يرجى التواصل مع البائع لإتمام العملية."
         },
         "liveAuctions": {
             "title": "المزايدة النشطة",
@@ -387,10 +448,25 @@
             "browse": "تصفح المزادات",
             "viewDetails": "عرض التفاصيل"
         },
+        "bids": {
+            "myMaxBid": "أقصى عرض لي",
+            "highestBid": "أعلى عرض",
+            "timeLeft": "الوقت المتبقي",
+            "currentHighest": "أعلى عرض حالي",
+            "bidAgain": "زايد مرة أخرى",
+            "noItems": "لا توجد عروض نشطة",
+            "noItemsSubtitle": "استكشف",
+            "browse": "تصفح المزادات"
+        },
         "category": {
             "add": "إضافة فئة",
             "addTitle": "إضافة فئة جديدة",
-            "editTitle": "تعديل الفئة"
+            "editTitle": "تعديل الفئة",
+            "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذه الفئة؟",
+            "deleteSuccess": "تم حذف الفئة بنجاح",
+            "deleteError": "خطأ في حذف الفئة",
+            "createSuccess": "تم إنشاء الفئة بنجاح",
+            "updateSuccess": "تم تحديث الفئة بنجاح"
         },
         "settings": {
             "account": "إعدادات الحساب",
@@ -403,7 +479,21 @@
             "deleteAccountDesc": "حذف حسابك وبياناتك نهائيًا",
             "signOut": "تسجيل الخروج",
             "signOutDesc": "تسجيل الخروج من حسابك",
-            "logoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+            "logoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+            "deleteAccountConfirm": "تحذير: هل أنت متأكد أنك تريد حذف حسابك؟ هذا الإجراء نهائي ولا يمكن التراجع عنه.",
+            "deleteAccountSuccess": "تم حذف الحساب بنجاح.",
+            "deleteAccountError": "فشل حذف الحساب",
+            "managedByAuth": "تتم إدارته بواسطة نظام المصادقة",
+            "password": {
+                "currentPassword": "كلمة المرور الحالية",
+                "newPassword": "كلمة المرور الجديدة",
+                "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+                "updating": "جاري التحديث...",
+                "updatePassword": "تحديث كلمة المرور",
+                "matchError": "كلمات المرور الجديدة غير متطابقة",
+                "success": "تم تحديث كلمة المرور بنجاح",
+                "error": "فشل تحديث كلمة المرور"
+            }
         },
         "notifications": {
             "title": "إشعاراتك",
@@ -414,8 +504,8 @@
             "clearAll": "مسح الكل",
             "new": "جديد",
             "types": {
-                "win": "🏆 مبروك! لقد فزت بمزاد \"{{title}}\" بسعر ${{price}}.",
-                "sale": "💰 تم بيع مزادك \"{{title}}\" بسعر ${{price}}!",
+                "win": "🏆 مبروك! لقد فزت بمزاد \"{{title}}\" بسعر {{price}}.",
+                "sale": "💰 تم بيع مزادك \"{{title}}\" بسعر {{price}}!",
                 "outbid": "📉 لقد تم تجاوز عرضك في مزاد \"{{title}}\"!",
                 "new_auction": "📢 مزاد جديد: \"{{title}}\" تم إدراجه للتو!",
                 "info_no_sale": "ℹ️ انتهى مزادك \"{{title}}\" دون بيع.",
@@ -428,14 +518,6 @@
                 "auction_cancelled": "❌ تم إلغاء مزاد \"{{title}}\".",
                 "default": "🔔 لديك إشعار جديد."
             }
-        },
-        "bids": {
-            "myMaxBid": "أقصى عرض لي",
-            "highestBid": "أعلى عرض",
-            "timeLeft": "الوقت المتبقي",
-            "noItems": "لا توجد عروض نشطة",
-            "noItemsSubtitle": "استكشف",
-            "browse": "تصفح المزادات"
         },
         "actions": {
             "addProduct": "إضافة منتج",
@@ -467,6 +549,25 @@
             "resolved": "تم الحل"
         }
     },
+    "categories": {
+        "watches": { "name": "ساعات", "description": "ساعات فاخرة ونادرة من جميع أنحاء العالم." },
+        "antiques": { "name": "أنتيكات", "description": "تحف تاريخية نادرة وقطع أثرية قديمة." },
+        "collectibles": { "name": "مقتنيات", "description": "عناصر إصدار محدود، عملات، وتذكارات." },
+        "fine-art": { "name": "فن رفيع", "description": "لوحات أصلية، رسومات، ومنحوتات." },
+        "art": { "name": "فن", "description": "لوحات أصلية، رسومات، ومنحوتات." },
+        "jewelry": { "name": "مجوهرات", "description": "أحجار كريمة رائعة، ذهب، ومجوهرات مصممة." },
+        "furniture": { "name": "أثاث", "description": "قطع أثاث راقية كلاسيكية وحديثة." },
+        "electronics": { "name": "إلكترونيات", "description": "أجهزة مميزة، تقنيات قديمة، وأجهزة صوتية راقية." },
+        "automobiles": { "name": "سيارات", "description": "سيارات كلاسيكية، مركبات فاخرة، وقطع غيار نادرة." },
+        "real-estate": { "name": "عقارات", "description": "عقارات حصرية، أراضٍ، ومساكن فاخرة." },
+        "rare-books": { "name": "كتب نادرة", "description": "طبعات أولى، مخطوطات، ونصوص تاريخية." },
+        "sports-memorabilia": { "name": "تذكارات رياضية", "description": "قمصان موقعة، كؤوس، ومعدات تاريخية." },
+        "wine-&-spirits": { "name": "مشروبات فاخرة", "description": "مشروبات فاخرة ونادرة ومعتقة." },
+        "musical-instruments": { "name": "آلات موسيقية", "description": "معدات احترافية، جيتارات عتيقة، وبيانو." },
+        "fashion-&-bags": { "name": "أزياء وحقائب", "description": "ملابس مصممين، حقائب يد نادرة، وإكسسوارات." },
+        "numismatics": { "name": "علم العملات", "description": "عملات نادرة، أوراق نقدية، ومجموعات عملات." },
+        "luxury": { "name": "فخامة", "description": "سلع فاخرة راقية وقطع حصرية." }
+    },
     "common": {
         "loading": "جاري التحميل...",
         "error": "خطأ",
@@ -475,9 +576,11 @@
         "create": "إنشاء",
         "saveChanges": "حفظ التغييرات",
         "cancel": "إلغاء",
+        "confirm": "تأكيد",
         "delete": "حذف",
         "edit": "تعديل",
         "name": "الاسم",
+        "note": "ملاحظة",
         "description": "الوصف",
         "add": "إضافة",
         "close": "إغلاق",
@@ -493,13 +596,29 @@
         "adjustFilters": "حاول تعديل البحث أو الفلاتر",
         "select": "اختر...",
         "backHome": "العودة للرئيسية",
-        "confirmSignOut": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+        "english": "الإنجليزية",
+        "arabic": "العربية",
+        "confirmSignOut": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+        "sessionExpired": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+        "switchToEnglish": "التغيير إلى الإنجليزية",
+        "switchToArabic": "التغيير إلى العربية",
+        "andManyMore": "وغيرها الكثير",
+        "yearsAgo": "منذ {{count}} سنة",
+        "monthsAgo": "منذ {{count}} شهر",
+        "daysAgo": "منذ {{count}} يوم",
+        "hoursAgo": "منذ {{count}} ساعة",
+        "minutesAgo": "منذ {{count}} دقيقة",
+        "secondsAgo": "منذ {{count}} ثانية"
     },
     "time": {
         "days": "أيام",
         "hours": "ساعات",
         "minutes": "دقائق",
         "seconds": "ثواني",
+        "daysShort": "يوم",
+        "hoursShort": "ساعة",
+        "minutesShort": "دقيقة",
+        "secondsShort": "ثانية",
         "ago": "منذ",
         "justNow": "الآن"
     },
@@ -520,17 +639,5 @@
         "help": "مركز المساعدة",
         "categories": "أهم الفئات",
         "copyright": "© 2026 منصة المزاد. جميع الحقوق محفوظة."
-    },
-    "table": {
-        "image": "الصورة",
-        "title": "العنوان",
-        "price": "السعر",
-        "status": "الحالة",
-        "bids": "العروض",
-        "endDate": "تاريخ الانتهاء",
-        "actions": "الإجراءات",
-        "amount": "المبلغ",
-        "date": "التاريخ",
-        "time": "الوقت"
     }
 }

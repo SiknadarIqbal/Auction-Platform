@@ -1,13 +1,68 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Basic -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auction</title>
+
+    <!-- Title (VERY IMPORTANT for Google) -->
+    <title>Mazadex - Online Auction Platform | Bid & Sell in Real-Time</title>
+
+    <!-- SEO Meta Description -->
+    <meta
+      name="description"
+      content="Mazadex is a powerful online auction platform where users can bid, sell, and explore trending products in real-time. Join now and start bidding!"
+    />
+
+    <!-- Keywords (optional but okay) -->
+    <meta
+      name="keywords"
+      content="Mazadex, online auction, bidding platform, buy and sell, live auctions, ecommerce auction"
+    />
+
+    <!-- Author -->
+    <meta name="author" content="Mazadex" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn preview) -->
+    <meta property="og:title" content="Mazadex - Online Auction Platform" />
+    <meta
+      property="og:description"
+      content="Bid, sell, and explore real-time auctions on Mazadex. The future of online bidding."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.mazadex.com" />
+    <meta property="og:image" content="https://www.mazadex.com/preview.png" />
+
+    <!-- Canonical URL (IMPORTANT for SEO) -->
+    <link rel="canonical" href="https://www.mazadex.com/" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Structured Data (Google understands your site better) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Mazadex",
+        "url": "https://www.mazadex.com",
+        "description": "Mazadex is a modern online auction platform for buying and selling products in real-time.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.mazadex.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
+
+    <!-- React App -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

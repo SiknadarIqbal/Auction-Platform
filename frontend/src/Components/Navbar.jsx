@@ -32,7 +32,7 @@ const Navbar = () => {
     // Handle logout with notification
     const handleLogout = async () => {
         await logout();
-        showSuccess("You have been logged out successfully.");
+        showSuccess(t('navbar.logoutSuccess'));
     };
 
     return (
@@ -80,7 +80,7 @@ const Navbar = () => {
                                         className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 ${currentLanguage === 'en' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-700'
                                             }`}
                                     >
-                                        <span className="text-xl">🇬🇧</span> English
+                                        <span className="text-xl">🇬🇧</span> {t('common.english')}
                                     </button>
                                     <button
                                         onClick={() => {
@@ -90,7 +90,7 @@ const Navbar = () => {
                                         className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-t border-gray-100 flex items-center gap-3 ${currentLanguage === 'ar' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-700'
                                             }`}
                                     >
-                                        <span className="text-xl">🇸🇦</span> العربية
+                                        <span className="text-xl">🇸🇦</span> {t('common.arabic')}
                                     </button>
                                 </div>
                             )}
@@ -114,7 +114,7 @@ const Navbar = () => {
                         <Link
                             to="/dashboard"
                             className="hidden md:flex w-10 h-10 bg-slate-700 rounded-lg items-center justify-center hover:bg-slate-600 transition-all duration-300 hover:scale-110 shadow-md"
-                            title="Dashboard"
+                            title={t('navbar.dashboard')}
                         >
                             <FaChartPie className="text-lg" />
                         </Link>
@@ -222,7 +222,7 @@ const Navbar = () => {
                                 <div className="flex items-center gap-3">
                                     <FaGlobe className={`${isRtl ? 'rotate-180' : ''} transition-transform duration-500`} />
                                     <span className="font-bold uppercase tracking-wider text-xs">
-                                        {isRtl ? 'Switch to English' : 'تغيير إلى العربية'}
+                                        {isRtl ? t('common.switchToEnglish') : t('common.switchToArabic')}
                                     </span>
                                 </div>
                                 <span className="text-xl">{isRtl ? '🇬🇧' : '🇸🇦'}</span>

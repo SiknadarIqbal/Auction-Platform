@@ -38,7 +38,7 @@ const Login = () => {
                     email: errorData.email
                 });
             } else {
-                setLoginError(errorData?.message || "Login failed. Please try again.");
+                setLoginError(errorData?.message || t('messages.loginError'));
             }
         }
     };
@@ -88,13 +88,13 @@ const Login = () => {
                             {t('navbar.title')}
                         </h1>
                         <p className="text-blue-100 text-lg">
-                            {t('auth.login.tagline') || 'Your gateway to rare and valuable collectibles'}
+                            {t('auth.login.tagline')}
                         </p>
                     </div>
 
                     {/* Features */}
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-semibold mb-6">{t('auth.login.whyChoose') || 'Why Choose Us?'}</h2>
+                        <h2 className="text-2xl font-semibold mb-6">{t('auth.login.whyChoose')}</h2>
                         {features.map((feature, index) => (
                             <div
                                 key={index}
@@ -172,7 +172,7 @@ const Login = () => {
                                             disabled={resendingEmail}
                                             className="text-sm text-yellow-700 underline hover:text-yellow-900 font-semibold disabled:opacity-50"
                                         >
-                                            {resendingEmail ? 'Sending...' : 'Resend Verification Email'}
+                                            {resendingEmail ? t('auth.login.resending') : t('auth.login.resendVerification')}
                                         </button>
                                     </div>
                                 </div>
@@ -193,7 +193,7 @@ const Login = () => {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="you@example.com"
+                                        placeholder={t('auth.login.emailPlaceholder')}
                                         required
                                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />
@@ -211,7 +211,7 @@ const Login = () => {
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="Enter your password"
+                                        placeholder={t('auth.login.passwordPlaceholder')}
                                         required
                                         className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />

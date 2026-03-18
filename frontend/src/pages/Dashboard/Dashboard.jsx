@@ -11,6 +11,7 @@ import { auctionService } from "../../services/auctionService";
 import { bidService } from "../../services/bidService";
 import { userService } from '../../services/userService';
 import { adminService } from '../../services/adminService';
+import { formatCurrency } from '../../utils/currencyUtils';
 
 const BidCountdown = ({ endTime, status }) => {
     const { t } = useTranslation();
@@ -34,9 +35,9 @@ const BidCountdown = ({ endTime, status }) => {
 
             if (hours > 24) {
                 const days = Math.floor(hours / 24);
-                setTimeLeft(`${days}d ${hours % 24}h`);
+                setTimeLeft(`${days}${t('time.daysShort')} ${hours % 24}${t('time.hoursShort')}`);
             } else {
-                setTimeLeft(`${hours}h ${mins}m ${secs}s`);
+                setTimeLeft(`${hours}${t('time.hoursShort')} ${mins}${t('time.minutesShort')} ${secs}${t('time.secondsShort')}`);
             }
             return true;
         };
@@ -67,10 +68,15 @@ const Dashboard = () => {
         }
         return tab || "products";
     });
+    const fileInputRef = React.useRef(null);
+    const fileInputRef2 = React.useRef(null);
+
     const [myAuctions, setMyAuctions] = useState([]);
     const [loadingAuctions, setLoadingAuctions] = useState(false);
     const [myBidsData, setMyBidsData] = useState([]);
     const [loadingBids, setLoadingBids] = useState(false);
+    const [wonAuctions, setWonAuctions] = useState([]);
+    const [loadingWonAuctions, setLoadingWonAuctions] = useState(false);
     const [unsoldItemsData, setUnsoldItemsData] = useState([]);
     const [loadingUnsold, setLoadingUnsold] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -78,6 +84,37 @@ const Dashboard = () => {
     const [loadingNotifications, setLoadingNotifications] = useState(false);
     const [liveAuctions, setLiveAuctions] = useState([]);
     const [loadingLiveAuctions, setLoadingLiveAuctions] = useState(false);
+    const [auditLog, setAuditLog] = useState([]);
+    const [loadingAuditLog, setLoadingAuditLog] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
+    const [showAddProduct, setShowAddProduct] = useState(false);
+    const [editingProduct, setEditingProduct] = useState(null);
+    const [isSubmittingProduct, setIsSubmittingProduct] = useState(false);
+    const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
+    const [newProduct, setNewProduct] = useState({
+        name: "",
+        description: "",
+        category: "",
+        startingBid: "",
+        minBid: "100",
+        buyNowPrice: "",
+        condition: "",
+        yearMade: "",
+        location: "",
+        contactNumber: "",
+        duration: "7",
+        reservePrice: "0",
+        images: [],
+        imagePreviews: []
+    });
+    const [categoryModal, setCategoryModal] = useState({ isOpen: false, mode: 'create', data: null });
+    const [categoryForm, setCategoryForm] = useState({ name: '', description: '', icon: 'FaBox' });
+    const [adminModal, setAdminModal] = useState({ isOpen: false, type: null, auctionId: null });
+    const [isAdminActionLoading, setIsAdminActionLoading] = useState(false);
+    const [userVerified, setUserVerified] = useState(false);
 
     useEffect(() => {
         const tab = searchParams.get("tab");
@@ -166,12 +203,12 @@ const Dashboard = () => {
 
     const formatAuditAction = (action) => {
         const map = {
-            manual_deactivation: 'User Deactivated',
-            reactivate_user: 'User Reactivated',
-            delete_account: 'Account Deleted',
-            deactivate_user: 'User Deactivated',
-            auction_paused: 'Auction Paused',
-            auction_cancelled: 'Auction Cancelled'
+            manual_deactivation: t('dashboard.admin.auditActions.manual_deactivation'),
+            reactivate_user: t('dashboard.admin.auditActions.reactivate_user'),
+            delete_account: t('dashboard.admin.auditActions.delete_account'),
+            deactivate_user: t('dashboard.admin.auditActions.deactivate_user'),
+            auction_paused: t('dashboard.admin.auditActions.auction_paused'),
+            auction_cancelled: t('dashboard.admin.auditActions.auction_cancelled')
         };
         return map[action] || action?.replace(/_/g, ' ') || action;
     };
@@ -264,16 +301,16 @@ const Dashboard = () => {
     const timeAgo = (date) => {
         const seconds = Math.floor((new Date() - new Date(date)) / 1000);
         let interval = seconds / 31536000;
-        if (interval > 1) return Math.floor(interval) + " years ago";
+        if (interval > 1) return t('common.yearsAgo', { count: Math.floor(interval) });
         interval = seconds / 2592000;
-        if (interval > 1) return Math.floor(interval) + " months ago";
+        if (interval > 1) return t('common.monthsAgo', { count: Math.floor(interval) });
         interval = seconds / 86400;
-        if (interval > 1) return Math.floor(interval) + " days ago";
+        if (interval > 1) return t('common.daysAgo', { count: Math.floor(interval) });
         interval = seconds / 3600;
-        if (interval > 1) return Math.floor(interval) + " hours ago";
+        if (interval > 1) return t('common.hoursAgo', { count: Math.floor(interval) });
         interval = seconds / 60;
-        if (interval > 1) return Math.floor(interval) + " minutes ago";
-        return Math.floor(seconds) + " seconds ago";
+        if (interval > 1) return t('common.minutesAgo', { count: Math.floor(interval) });
+        return t('common.secondsAgo', { count: Math.floor(seconds) });
     };
 
     const fetchNotifications = async () => {
@@ -304,8 +341,6 @@ const Dashboard = () => {
     };
 
     // Initialize sidebar state based on screen size
-    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
-    const [editingProduct, setEditingProduct] = useState(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -334,27 +369,6 @@ const Dashboard = () => {
         };
     }, [isSidebarOpen]);
 
-    const [showAddProduct, setShowAddProduct] = useState(false);
-    const [newProduct, setNewProduct] = useState({
-        name: "",
-        description: "",
-        category: "",
-        startingBid: "",
-        minBid: "100", // Default increment
-        buyNowPrice: "",
-        condition: "",
-        yearMade: "",
-        location: "",
-        contactNumber: "",
-        duration: "7",
-        reservePrice: "0",
-        images: [],
-        imagePreviews: []
-    });
-
-    const [categories, setCategories] = useState([]);
-    const [categoryModal, setCategoryModal] = useState({ isOpen: false, mode: 'create', data: null });
-    const [categoryForm, setCategoryForm] = useState({ name: '', description: '', icon: 'FaBox' });
 
     useEffect(() => {
         fetchCategories();
@@ -373,21 +387,22 @@ const Dashboard = () => {
 
     const handleCategorySubmit = async (e) => {
         e.preventDefault();
+        setIsSubmittingCategory(true);
         try {
             if (categoryModal.mode === 'create') {
                 await categoryAPI.create(categoryForm);
-                showSuccess("Category created successfully");
+                showSuccess(t('dashboard.category.createSuccess'));
             } else {
                 await categoryAPI.update(categoryModal.data._id, categoryForm);
-                showSuccess("Category updated successfully");
+                showSuccess(t('dashboard.category.updateSuccess'));
             }
             setCategoryModal({ isOpen: false, mode: 'create', data: null });
             setCategoryForm({ name: '', description: '', icon: 'FaBox' });
             fetchCategories();
         } catch (error) {
-            const msg = error.response?.data?.message || "Error saving category";
+            const msg = error.response?.data?.message || t('dashboard.category.createError');
             if (msg === "Invalid or expired token." || msg === "Access denied. No token provided.") {
-                showError("Session expired. Please login again.");
+                showError(t('common.sessionExpired'));
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('user');
@@ -395,18 +410,20 @@ const Dashboard = () => {
                 return;
             }
             showError(msg);
+        } finally {
+            setIsSubmittingCategory(false);
         }
     };
 
     const handleDeleteCategory = async (id) => {
-        const confirmed = await showConfirm("Are you sure you want to delete this category?");
+        const confirmed = await showConfirm(t('dashboard.category.deleteConfirm'));
         if (confirmed) {
             try {
                 await categoryAPI.delete(id);
-                showSuccess("Category deleted successfully");
+                showSuccess(t('dashboard.category.deleteSuccess'));
                 fetchCategories();
             } catch (error) {
-                showError(error.response?.data?.message || "Error deleting category");
+                showError(error.response?.data?.message || t('dashboard.category.deleteError'));
             }
         }
     };
@@ -420,11 +437,8 @@ const Dashboard = () => {
         }
     };
 
-    const [userVerified, setUserVerified] = useState(false); // Mock Email Verification Status
-    const [adminModal, setAdminModal] = useState({ isOpen: false, type: null, auctionId: null });
-    const [adminActionReason, setAdminActionReason] = useState("");
-    const [auditLog, setAuditLog] = useState([]);
-    const [loadingAuditLog, setLoadingAuditLog] = useState(false);
+
+
 
     const menuItems = [
         { id: "products", name: t('dashboard.tabs.myProducts'), icon: <FaBox />, roles: ['seller', 'admin'] },
@@ -438,8 +452,6 @@ const Dashboard = () => {
         { id: "settings", name: t('dashboard.tabs.settings'), icon: <FaCog />, roles: ['buyer', 'seller', 'admin'] },
     ].filter(item => item.roles.includes(user?.role));
 
-    const [wonAuctions, setWonAuctions] = useState([]);
-    const [loadingWonAuctions, setLoadingWonAuctions] = useState(false);
 
 
 
@@ -458,7 +470,7 @@ const Dashboard = () => {
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if (passwordModal.newPassword !== passwordModal.confirmPassword) {
-            showError("New passwords do not match");
+            showError(t('dashboard.settings.password.matchError'));
             return;
         }
 
@@ -470,7 +482,7 @@ const Dashboard = () => {
             });
 
             if (res.success) {
-                showSuccess("Password updated successfully");
+                showSuccess(t('dashboard.settings.password.success'));
                 setPasswordModal({
                     isOpen: false,
                     currentPassword: '',
@@ -479,26 +491,29 @@ const Dashboard = () => {
                 });
             }
         } catch (error) {
-            showError(error.response?.data?.message || "Failed to update password");
+            showError(error.response?.data?.message || t('dashboard.settings.password.error'));
         } finally {
             setPasswordLoading(false);
         }
     };
 
     const handleDeleteAccount = async () => {
-        const confirmed = await showConfirm("WARNING: Are you sure you want to delete your account? This action is permanent and cannot be undone.");
+        const confirmed = await showConfirm(t('dashboard.settings.deleteAccountConfirm'));
         if (confirmed) {
+            setIsDeletingAccount(true);
             try {
                 const res = await userService.deleteAccount();
                 if (res.success) {
-                    showSuccess("Account deleted successfully.");
+                    showSuccess(t('dashboard.settings.deleteAccountSuccess'));
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                     localStorage.removeItem('user');
                     setTimeout(() => window.location.href = '/', 1500);
                 }
             } catch (error) {
-                showError(error.response?.data?.message || "Failed to delete account");
+                showError(error.response?.data?.message || t('dashboard.settings.deleteAccountError'));
+            } finally {
+                setIsDeletingAccount(false);
             }
         }
     };
@@ -520,7 +535,7 @@ const Dashboard = () => {
             const filesToAdd = files.slice(0, availableSlots);
 
             if (filesToAdd.length < files.length) {
-                showWarning(`You can only upload up to 10 images. ${files.length - filesToAdd.length} file(s) were not added.`);
+                showWarning(t('dashboard.products.uploadLimitError'));
             }
 
             const newPreviews = filesToAdd.map(file => URL.createObjectURL(file));
@@ -541,11 +556,11 @@ const Dashboard = () => {
         }));
     };
 
-    const [formErrors, setFormErrors] = useState({});
 
     const handleSubmitProduct = async (e) => {
         e.preventDefault();
         setFormErrors({}); // Clear previous errors
+        setIsSubmittingProduct(true);
 
         const formData = new FormData();
         formData.append('title', newProduct.name);
@@ -580,7 +595,7 @@ const Dashboard = () => {
             }
 
             if (response.success) {
-                showSuccess(editingProduct ? "Auction updated successfully!" : "Auction created successfully! It is now live on the website.");
+                showSuccess(editingProduct ? t('dashboard.products.updateSuccess') : t('dashboard.products.createSuccess'));
                 setShowAddProduct(false);
                 setEditingProduct(null);
                 setNewProduct({
@@ -629,17 +644,17 @@ const Dashboard = () => {
                 });
 
                 setFormErrors(backendErrors);
-                // Also show alert for visibility
-                showError("Please correct the errors in the form.");
-                return;
+                showError(t('common.error'));
+            } else {
+                const msg = error.response?.data?.message || t('dashboard.products.createError');
+                if (msg === "Invalid or expired token." || (error.response?.status === 401)) {
+                    showError(t('common.sessionExpired'));
+                } else {
+                    showError(msg);
+                }
             }
-
-            const msg = error.response?.data?.message || "Error creating auction";
-            if (msg === "Invalid or expired token." || (error.response?.status === 401)) {
-                showError("Session expired. Please login again.");
-                return;
-            }
-            showError(msg);
+        } finally {
+            setIsSubmittingProduct(false);
         }
     };
 
@@ -647,7 +662,7 @@ const Dashboard = () => {
 
     const handleEditClick = (auction) => {
         if (auction.totalBids > 0) {
-            showError("This auction cannot be edited because bids have already been placed.");
+            showError(t('dashboard.products.editErrorWithBids'));
             return;
         }
         setEditingProduct(auction);
@@ -671,16 +686,16 @@ const Dashboard = () => {
     };
 
     const handleDeleteProduct = async (id) => {
-        const confirmed = await showConfirm("Are you sure you want to delete this auction? This action cannot be undone.");
+        const confirmed = await showConfirm(t('dashboard.products.deleteConfirm'));
         if (confirmed) {
             try {
                 const response = await auctionService.deleteAuction(id);
                 if (response.success) {
-                    showSuccess("Auction deleted successfully.");
+                    showSuccess(t('dashboard.products.deleteSuccess'));
                     fetchMyAuctions();
                 }
             } catch (error) {
-                showError(error.response?.data?.message || "Error deleting auction");
+                showError(error.response?.data?.message || t('dashboard.products.deleteError'));
             }
         }
     };
@@ -713,74 +728,80 @@ const Dashboard = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.productName')} *</label>
-                                                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: Rolex Watch" />
+                                                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.name ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.productName')} />
                                                 {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.category')} *</label>
                                                 <select name="category" value={newProduct.category} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.category ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`}>
                                                     <option value="">{t('common.select')}</option>
-                                                    {categories.map(cat => (
-                                                        <option key={cat._id} value={cat.slug || cat.name.toLowerCase()}>{cat.name}</option>
-                                                    ))}
+                                                    {categories.map(cat => {
+                                                        const slug = cat.slug || cat.name.toLowerCase().split(' ').join('-');
+                                                        const catKey = `categories.${slug}.name`;
+                                                        const translatedCat = t(catKey);
+                                                        const displayName = translatedCat !== catKey ? translatedCat : cat.name;
+                                                        return (
+                                                            <option key={cat._id} value={slug}>{displayName}</option>
+                                                        );
+                                                    })}
                                                 </select>
                                                 {formErrors.category && <p className="text-red-500 text-xs mt-1">{formErrors.category}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.startingBid')} *</label>
-                                                <input type="number" name="startingBid" value={newProduct.startingBid} onChange={handleInputChange} required min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.startingBid ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="10000" />
+                                                <input type="number" name="startingBid" value={newProduct.startingBid} onChange={handleInputChange} required min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.startingBid ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.startingBid')} />
                                                 {formErrors.startingBid && <p className="text-red-500 text-xs mt-1">{formErrors.startingBid}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.minBid')} *</label>
-                                                <input type="number" name="minBid" value={newProduct.minBid} onChange={handleInputChange} required min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.minBid ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="10500" />
+                                                <input type="number" name="minBid" value={newProduct.minBid} onChange={handleInputChange} required min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.minBid ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.minBid')} />
                                                 {formErrors.minBid && <p className="text-red-500 text-xs mt-1">{formErrors.minBid}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.buyNowPrice')} <span className="text-gray-400 font-normal">({t('dashboard.products.optional')})</span></label>
-                                                <input type="number" name="buyNowPrice" value={newProduct.buyNowPrice} onChange={handleInputChange} min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.buyNowPrice ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: 15000" />
+                                                <input type="number" name="buyNowPrice" value={newProduct.buyNowPrice} onChange={handleInputChange} min="0" step="100" className={`w-full px-4 py-3 border-2 ${formErrors.buyNowPrice ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.buyNowPrice')} />
                                                 {formErrors.buyNowPrice && <p className="text-red-500 text-xs mt-1">{formErrors.buyNowPrice}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.condition')} *</label>
                                                 <select name="condition" value={newProduct.condition} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.condition ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`}>
                                                     <option value="">{t('common.select')}</option>
-                                                    <option value="Mint">Mint</option>
-                                                    <option value="Excellent">Excellent</option>
-                                                    <option value="Very Good">Very Good</option>
-                                                    <option value="Good">Good</option>
-                                                    <option value="Fair">Fair</option>
-                                                    <option value="Restored">Restored</option>
+                                                    <option value="Mint">{t('dashboard.products.conditions.mint')}</option>
+                                                    <option value="Excellent">{t('dashboard.products.conditions.excellent')}</option>
+                                                    <option value="Very Good">{t('dashboard.products.conditions.veryGood')}</option>
+                                                    <option value="Good">{t('dashboard.products.conditions.good')}</option>
+                                                    <option value="Fair">{t('dashboard.products.conditions.fair')}</option>
+                                                    <option value="Restored">{t('dashboard.products.conditions.restored')}</option>
                                                 </select>
                                                 {formErrors.condition && <p className="text-red-500 text-xs mt-1">{formErrors.condition}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.yearMade')} *</label>
-                                                <input type="text" name="yearMade" value={newProduct.yearMade} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.yearMade ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: 2026" />
+                                                <input type="text" name="yearMade" value={newProduct.yearMade} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.yearMade ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.yearMade')} />
                                                 {formErrors.yearMade && <p className="text-red-500 text-xs mt-1">{formErrors.yearMade}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.location')} *</label>
-                                                <input type="text" name="location" value={newProduct.location} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.location ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: UAE" />
+                                                <input type="text" name="location" value={newProduct.location} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.location ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.location')} />
                                                 {formErrors.location && <p className="text-red-500 text-xs mt-1">{formErrors.location}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.contactNumber')} *</label>
-                                                <input type="text" name="contactNumber" value={newProduct.contactNumber} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.contactNumber ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="e.g: +1 234 567 890" />
+                                                <input type="text" name="contactNumber" value={newProduct.contactNumber} onChange={handleInputChange} required className={`w-full px-4 py-3 border-2 ${formErrors.contactNumber ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.contactNumber')} />
                                                 {formErrors.contactNumber && <p className="text-red-500 text-xs mt-1">{formErrors.contactNumber}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.reservePrice')}</label>
-                                                <input type="number" name="reservePrice" onChange={handleInputChange} className={`w-full px-4 py-3 border-2 ${formErrors.reservePrice ? 'border-red-500' : 'border-gray-200'} rounded-lg`} placeholder="Hidden min price" />
+                                                <input type="number" name="reservePrice" onChange={handleInputChange} className={`w-full px-4 py-3 border-2 ${formErrors.reservePrice ? 'border-red-500' : 'border-gray-200'} rounded-lg`} placeholder={t('dashboard.products.placeholders.reservePrice')} />
                                                 {formErrors.reservePrice && <p className="text-red-500 text-xs mt-1">{formErrors.reservePrice}</p>}
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.duration')}</label>
                                                 <select name="duration" value={newProduct.duration} onChange={handleInputChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg">
-                                                    <option value="3">3 Days</option>
-                                                    <option value="5">5 Days</option>
-                                                    <option value="7">7 Days</option>
-                                                    <option value="10">10 Days</option>
+                                                    <option value="3">{t('dashboard.products.durations.3days')}</option>
+                                                    <option value="5">{t('dashboard.products.durations.5days')}</option>
+                                                    <option value="7">{t('dashboard.products.durations.7days')}</option>
+                                                    <option value="10">{t('dashboard.products.durations.10days')}</option>
                                                 </select>
                                             </div>
                                             <div className="md:col-span-2">
@@ -815,10 +836,18 @@ const Dashboard = () => {
                                                                         type="file"
                                                                         accept="image/*"
                                                                         multiple
+                                                                        ref={fileInputRef}
                                                                         onChange={handleImageChange}
-                                                                        className="mt-4 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                                                                        className="hidden"
                                                                     />
-                                                                    <p className="text-sm text-gray-500 mt-2">{newProduct.imagePreviews.length} / 10 images uploaded</p>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => fileInputRef.current.click()}
+                                                                        className="mt-4 px-6 py-2 bg-blue-50 text-blue-700 rounded-lg font-semibold hover:bg-blue-100 transition duration-200 border border-blue-100 flex items-center justify-center gap-2 mx-auto"
+                                                                    >
+                                                                        <FaCamera /> {t('dashboard.products.chooseFile')}
+                                                                    </button>
+                                                                    <p className="text-sm text-gray-500 mt-2">{t('dashboard.products.imagesUploaded', { count: newProduct.imagePreviews.length })}</p>
                                                                 </div>
                                                             )}
                                                         </div>
@@ -831,9 +860,18 @@ const Dashboard = () => {
                                                                 type="file"
                                                                 accept="image/*"
                                                                 multiple
+                                                                ref={fileInputRef2}
                                                                 onChange={handleImageChange}
-                                                                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                                                                className="hidden"
                                                             />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => fileInputRef2.current.click()}
+                                                                className="px-8 py-3 bg-blue-50 text-blue-700 rounded-lg font-bold hover:bg-blue-100 transition duration-200 border-2 border-dashed border-blue-200 flex items-center justify-center gap-2 mx-auto"
+                                                            >
+                                                                <FaCamera /> {t('dashboard.products.chooseFile')}
+                                                            </button>
+                                                            <p className="text-sm text-gray-500 mt-2">{t('dashboard.products.noFileChosen')}</p>
                                                         </div>
                                                     )}
                                                 </div>
@@ -842,11 +880,16 @@ const Dashboard = () => {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">{t('dashboard.products.description')} *</label>
-                                            <textarea name="description" value={newProduct.description} onChange={handleInputChange} required rows="4" className={`w-full px-4 py-3 border-2 ${formErrors.description ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder="Detailed description of the product..."></textarea>
+                                            <textarea name="description" value={newProduct.description} onChange={handleInputChange} required rows="4" className={`w-full px-4 py-3 border-2 ${formErrors.description ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:border-blue-500 transition duration-200`} placeholder={t('dashboard.products.placeholders.description')}></textarea>
                                             {formErrors.description && <p className="text-red-500 text-xs mt-1">{formErrors.description}</p>}
                                         </div>
                                         <div className="flex flex-col md:flex-row gap-4 pt-4">
-                                            <button type="submit" className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition duration-200 shadow-lg">
+                                            <button 
+                                                type="submit" 
+                                                disabled={isSubmittingProduct}
+                                                className={`flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition duration-200 shadow-lg flex items-center justify-center gap-2 ${isSubmittingProduct ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                            >
+                                                {isSubmittingProduct && <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full font-bold"></span>}
                                                 {editingProduct ? t('common.saveChanges') : t('dashboard.products.submitAdd')}
                                             </button>
                                             <button
@@ -940,7 +983,7 @@ const Dashboard = () => {
                                                     <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                                                         <div>
                                                             <p className="text-gray-500">{t('dashboard.products.currentBid')}</p>
-                                                            <p className="font-semibold text-green-600">${auction.currentHighestBid || auction.startingBid}</p>
+                                                            <p className="font-semibold text-green-600">{formatCurrency(auction.currentHighestBid || auction.startingBid)}</p>
                                                         </div>
                                                         <div>
                                                             <p className="text-gray-500">{t('dashboard.products.bids')}</p>
@@ -993,7 +1036,7 @@ const Dashboard = () => {
                                                                 </div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm font-semibold text-green-600">${auction.currentHighestBid || auction.startingBid}</div>
+                                                                <div className="text-sm font-semibold text-green-600">{formatCurrency(auction.currentHighestBid || auction.startingBid)}</div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
                                                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${auction.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -1077,19 +1120,19 @@ const Dashboard = () => {
                                                     <div className="flex justify-between items-start mb-1">
                                                         <h3 className="font-bold text-gray-900 truncate pr-2">{item.title}</h3>
                                                         <div className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
-                                                            Won
+                                                            {t('dashboard.wonAuctions.won')}
                                                         </div>
                                                     </div>
                                                     <p className="text-xl font-black text-blue-600 mb-2">
-                                                        ${item.finalPrice?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        {formatCurrency(item.finalPrice?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                                                     </p>
                                                     <div className="space-y-1">
                                                         <div className="flex items-center gap-2 text-sm text-gray-500">
-                                                            <span className="shrink-0 font-medium text-gray-400">Seller:</span>
-                                                            <span className="truncate text-gray-700 font-semibold">{item.sellerId?.name || 'Seller'}</span>
+                                                            <span className="shrink-0 font-medium text-gray-400">{t('product.seller')}:</span>
+                                                            <span className="truncate text-gray-700 font-semibold">{item.sellerId?.name || t('product.seller')}</span>
                                                         </div>
                                                         <div className="flex items-center gap-2 text-sm text-gray-500">
-                                                            <span className="shrink-0 font-medium text-gray-400">Phone:</span>
+                                                            <span className="shrink-0 font-medium text-gray-400">{t('dashboard.products.contactNumber')}:</span>
                                                             <a href={`tel:${item.contactNumber}`} className="text-blue-600 font-bold hover:underline select-all">
                                                                 {item.contactNumber}
                                                             </a>
@@ -1104,12 +1147,12 @@ const Dashboard = () => {
                                                 >
                                                     {t('dashboard.liveAuctions.viewDetails')}
                                                 </Link>
-                                                <a
-                                                    href={`tel:${item.contactNumber}`}
-                                                    className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold text-center active:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-                                                >
-                                                    Call Seller
-                                                </a>
+                                                    <a
+                                                        href={`tel:${item.contactNumber}`}
+                                                        className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold text-center active:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                                                    >
+                                                        {t('dashboard.wonAuctions.callSeller')}
+                                                    </a>
                                             </div>
                                         </div>
                                     ))}
@@ -1131,8 +1174,8 @@ const Dashboard = () => {
                                             {wonAuctions.map(item => (
                                                 <tr key={item._id}>
                                                     <td className="px-6 py-4 text-gray-800 font-medium">{item.title}</td>
-                                                    <td className="px-6 py-4 text-gray-600">${item.finalPrice?.toFixed(2)}</td>
-                                                    <td className="px-6 py-4 text-gray-600 font-medium">{item.sellerId?.name || 'Seller'}</td>
+                                                    <td className="px-6 py-4 text-gray-600">{formatCurrency(item.finalPrice?.toFixed(2))}</td>
+                                                    <td className="px-6 py-4 text-gray-600 font-medium">{item.sellerId?.name || t('product.seller')}</td>
                                                     <td className="px-6 py-4 text-blue-600 font-semibold">
                                                         <a href={`tel:${item.contactNumber}`} className="hover:underline">{item.contactNumber}</a>
                                                     </td>
@@ -1149,7 +1192,7 @@ const Dashboard = () => {
                             </>
                         )}
                         <div className="mt-8 p-4 bg-gray-50 rounded-lg text-sm text-gray-500">
-                            <p><strong>Note:</strong> Items listed here have been successfully won by you. Please contact the seller for fulfillment.</p>
+                            <p><strong>{t('common.note')}:</strong> {t('dashboard.wonAuctions.note')}</p>
                         </div>
                     </div>
                 );
@@ -1198,9 +1241,9 @@ const Dashboard = () => {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <div className="flex items-baseline gap-2 mb-2">
-                                                        <span className="text-2xl font-black text-gray-900">${bid.bidAmount}</span>
-                                                        <span className="text-xs text-gray-400 font-medium">Your Bid</span>
+                                                    <div className="flex flex-col gap-0 mb-2">
+                                                        <span className="text-lg font-black text-gray-900 leading-tight truncate">{formatCurrency(bid.bidAmount)}</span>
+                                                        <span className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">Your Bid</span>
                                                     </div>
                                                     <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
                                                         <FaClock className="text-blue-500" />
@@ -1212,15 +1255,15 @@ const Dashboard = () => {
                                             </div>
                                             <div className="px-4 pb-4">
                                                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                                    <div>
-                                                        <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Current Highest</p>
-                                                        <p className="text-lg font-bold text-green-600">${bid.auctionId?.currentHighestBid}</p>
+                                                    <div className="min-w-0 flex-1 mr-2">
+                                                        <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider truncate">{t('dashboard.bids.currentHighest')}</p>
+                                                        <p className="text-base font-bold text-green-600 truncate">{formatCurrency(bid.auctionId?.currentHighestBid)}</p>
                                                     </div>
                                                     <Link
                                                         to={`/product/${bid.auctionId?._id}`}
                                                         className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-sm active:bg-blue-700"
                                                     >
-                                                        Bid Again
+                                                        {t('dashboard.bids.bidAgain')}
                                                     </Link>
                                                 </div>
                                             </div>
@@ -1259,8 +1302,8 @@ const Dashboard = () => {
                                                             {bid.auctionId?.title}
                                                         </Link>
                                                     </td>
-                                                    <td className="px-6 py-4 text-gray-600 font-semibold">${bid.bidAmount}</td>
-                                                    <td className="px-6 py-4 text-green-600 font-bold">${bid.auctionId?.currentHighestBid}</td>
+                                                    <td className="px-6 py-4 text-gray-600 font-semibold whitespace-nowrap">{formatCurrency(bid.bidAmount)}</td>
+                                                    <td className="px-6 py-4 text-green-600 font-bold whitespace-nowrap">{formatCurrency(bid.auctionId?.currentHighestBid)}</td>
                                                     <td className="px-6 py-4 text-gray-700 font-bold">
                                                         <div className="flex items-center gap-2">
                                                             <FaClock className="text-blue-500 shrink-0" size={14} />
@@ -1420,9 +1463,10 @@ const Dashboard = () => {
                                         <button
                                             onClick={async () => {
                                                 if (!adminActionReason?.trim()) {
-                                                    alert(t('dashboard.admin.reasonRequired') || 'Reason required');
+                                                    alert(t('dashboard.admin.reasonRequired'));
                                                     return;
                                                 }
+                                                setIsAdminActionLoading(true);
                                                 try {
                                                     if (adminModal.type === 'Pause') {
                                                         await adminService.pauseAuction(adminModal.auctionId, adminActionReason.trim());
@@ -1433,13 +1477,17 @@ const Dashboard = () => {
                                                     setAdminActionReason('');
                                                     fetchLiveAuctions();
                                                     fetchAuditLogs();
-                                                    alert(adminModal.type === 'Pause' ? (t('dashboard.admin.pauseSuccess') || 'Auction paused successfully.') : (t('dashboard.admin.cancelSuccess') || 'Auction cancelled successfully.'));
+                                                    alert(adminModal.type === 'Pause' ? t('dashboard.admin.pauseSuccess') : t('dashboard.admin.cancelSuccess'));
                                                 } catch (err) {
-                                                    const msg = err.response?.data?.message || err.message || 'Action failed';
+                                                    const msg = err.response?.data?.message || err.message || t('common.error');
                                                     alert(msg);
+                                                } finally {
+                                                    setIsAdminActionLoading(false);
                                                 }
                                             }}
-                                            className="px-4 py-2 bg-blue-600 text-white rounded font-bold">
+                                            disabled={isAdminActionLoading}
+                                            className={`px-4 py-2 bg-blue-600 text-white rounded font-bold flex items-center gap-2 ${isAdminActionLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                            {isAdminActionLoading && <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>}
                                             {t('dashboard.admin.confirm')} {adminModal.type}
                                         </button>
                                     </div>
@@ -1481,11 +1529,11 @@ const Dashboard = () => {
                                             <div className="grid grid-cols-2 gap-2 mb-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="text-[9px] uppercase font-bold text-gray-400 tracking-tight truncate">{t('dashboard.products.reservePrice')}</span>
-                                                    <span className="text-sm font-black text-gray-700">${item.reservePrice}</span>
+                                                    <span className="text-sm font-black text-gray-700">{formatCurrency(item.reservePrice)}</span>
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="text-[9px] uppercase font-bold text-gray-400 tracking-tight truncate">{t('dashboard.products.currentBid')}</span>
-                                                    <span className="text-sm font-black text-rose-600">${item.currentHighestBid}</span>
+                                                    <span className="text-sm font-black text-rose-600">{formatCurrency(item.currentHighestBid)}</span>
                                                 </div>
                                             </div>
                                             <Link to={`/product/${item._id}`} className="flex items-center justify-center w-full bg-slate-100 text-slate-700 py-3 rounded-xl font-bold hover:bg-slate-200 transition-all gap-2 text-xs">
@@ -1520,8 +1568,8 @@ const Dashboard = () => {
                                                         />
                                                     </td>
                                                     <td className="px-6 py-4 font-medium text-gray-800">{item.title}</td>
-                                                    <td className="px-6 py-4 text-gray-600">${item.reservePrice}</td>
-                                                    <td className="px-6 py-4 text-red-500 font-semibold">${item.currentHighestBid}</td>
+                                                    <td className="px-6 py-4 text-gray-600">{formatCurrency(item.reservePrice)}</td>
+                                                    <td className="px-6 py-4 text-red-500 font-semibold">{formatCurrency(item.currentHighestBid)}</td>
                                                     <td className="px-6 py-4">
                                                         <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium">
                                                             {t('dashboard.unsold.reserveNotMet')}
@@ -1579,13 +1627,13 @@ const Dashboard = () => {
                                                 </span>
                                             </div>
                                             <div className="grid grid-cols-2 gap-4 mb-5 p-3 bg-gray-50 rounded-xl border border-gray-50">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">{t('dashboard.products.currentBid')}</span>
-                                                    <span className="text-lg font-black text-green-600">${(product.currentHighestBid || product.price || 0).toLocaleString()}</span>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider truncate">{t('dashboard.products.currentBid')}</span>
+                                                    <span className="text-base font-black text-green-600 truncate">{formatCurrency(product.currentHighestBid || product.price || 0)}</span>
                                                 </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">{t('dashboard.products.bids')}</span>
-                                                    <span className="text-lg font-black text-gray-700">{product.totalBids || product.bids || 0}</span>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider truncate">{t('dashboard.products.bids')}</span>
+                                                    <span className="text-base font-black text-gray-700 truncate">{product.totalBids || product.bids || 0}</span>
                                                 </div>
                                             </div>
                                             <Link
@@ -1631,8 +1679,8 @@ const Dashboard = () => {
                                                             <p className="text-[10px] font-medium text-gray-400">ID: #{product._id?.slice(-8) || product.id?.slice(-8)}</p>
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4">
-                                                        <span className="font-black text-green-600 text-base">${(product.currentHighestBid || product.price || 0).toLocaleString()}</span>
+                                                     <td className="px-6 py-4 whitespace-nowrap text-green-600">
+                                                        <span className="font-black text-base">{formatCurrency((product.currentHighestBid || product.price || 0).toLocaleString())}</span>
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center gap-2">
@@ -1668,10 +1716,10 @@ const Dashboard = () => {
                 return (
                     <div>
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-gray-800">{t('dashboard.tabs.categories')}</h2>
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-800">{t('dashboard.tabs.categories')}</h2>
                             <button
                                 onClick={() => openCategoryModal('create')}
-                                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition duration-200 shadow-md"
+                                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 md:px-6 text-sm md:text-base rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition duration-200 shadow-[0_4px_12px_rgba(37,99,235,0.2)] hover:shadow-[0_6px_16px_rgba(37,99,235,0.3)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-md"
                             >
                                 {t('dashboard.category.add')}
                             </button>
@@ -1684,8 +1732,22 @@ const Dashboard = () => {
                                         <div className="text-4xl mb-3 flex justify-center text-blue-600">
                                             <FaList />
                                         </div>
-                                        <h3 className="font-bold text-gray-800 mb-2">{cat.name}</h3>
-                                        <p className="text-sm text-gray-500 mb-4">{cat.description}</p>
+                                        <h3 className="font-bold text-gray-800 mb-2">
+                                            {(() => {
+                                                const slug = cat.slug || cat.name.toLowerCase().split(' ').join('-');
+                                                const catKey = `categories.${slug}.name`;
+                                                const translatedCat = t(catKey);
+                                                return translatedCat !== catKey ? translatedCat : cat.name;
+                                            })()}
+                                        </h3>
+                                        <p className="text-sm text-gray-500 mb-4">
+                                            {(() => {
+                                                const slug = cat.slug || cat.name.toLowerCase().split(' ').join('-');
+                                                const descKey = `categories.${slug}.description`;
+                                                const translatedDesc = t(descKey);
+                                                return translatedDesc !== descKey ? translatedDesc : cat.description;
+                                            })()}
+                                        </p>
                                         <div className="flex gap-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                             <button
                                                 onClick={() => openCategoryModal('edit', cat)}
@@ -1747,8 +1809,10 @@ const Dashboard = () => {
                                             </button>
                                             <button
                                                 type="submit"
-                                                className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg"
+                                                disabled={isSubmittingCategory}
+                                                className={`flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg flex items-center justify-center gap-2 ${isSubmittingCategory ? 'opacity-70 cursor-not-allowed' : ''}`}
                                             >
+                                                {isSubmittingCategory && <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>}
                                                 {categoryModal.mode === 'create' ? t('common.create') : t('common.saveChanges')}
                                             </button>
                                         </div>
@@ -1916,7 +1980,7 @@ const Dashboard = () => {
                                         <p className="font-semibold text-gray-800">{t('auth.email')}</p>
                                         <p className="text-sm text-gray-500">{user?.email}</p>
                                     </div>
-                                    <span className="text-xs text-gray-400 italic">Managed by Auth System</span>
+                                    <span className="text-xs text-gray-400 italic">{t('dashboard.settings.managedByAuth')}</span>
                                 </div>
                                 <div className="flex flex-col md:flex-row md:items-center justify-between py-3 border-b border-gray-100">
                                     <div>
@@ -1938,8 +2002,10 @@ const Dashboard = () => {
                                     </div>
                                     <button
                                         onClick={handleDeleteAccount}
-                                        className="mt-2 md:mt-0 text-red-600 hover:text-red-800 font-medium text-sm"
+                                        disabled={isDeletingAccount}
+                                        className={`mt-2 md:mt-0 text-red-600 hover:text-red-800 font-medium text-sm flex items-center gap-1 ${isDeletingAccount ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
+                                        {isDeletingAccount && <span className="animate-spin h-3 w-3 border-2 border-red-600 border-t-transparent rounded-full"></span>}
                                         {t('common.delete')}
                                     </button>
                                 </div>
@@ -1973,7 +2039,7 @@ const Dashboard = () => {
                             <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
                                 <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl animate-scaleIn">
                                     <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                                        <h3 className="text-xl font-bold text-gray-800">Change Password</h3>
+                                        <h3 className="text-xl font-bold text-gray-800">{t('dashboard.settings.changePassword')}</h3>
                                         <button
                                             onClick={() => setPasswordModal({ ...passwordModal, isOpen: false })}
                                             className="text-gray-400 hover:text-gray-600"
@@ -1983,7 +2049,7 @@ const Dashboard = () => {
                                     </div>
                                     <form onSubmit={handlePasswordChange} className="p-6 space-y-4">
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1">Current Password</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1">{t('dashboard.settings.password.currentPassword')}</label>
                                             <input
                                                 type="password"
                                                 required
@@ -1993,7 +2059,7 @@ const Dashboard = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1">{t('dashboard.settings.password.newPassword')}</label>
                                             <input
                                                 type="password"
                                                 required
@@ -2003,7 +2069,7 @@ const Dashboard = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1">{t('dashboard.settings.password.confirmNewPassword')}</label>
                                             <input
                                                 type="password"
                                                 required
@@ -2018,14 +2084,14 @@ const Dashboard = () => {
                                                 onClick={() => setPasswordModal({ ...passwordModal, isOpen: false })}
                                                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition"
                                             >
-                                                Cancel
+                                                {t('common.cancel')}
                                             </button>
                                             <button
                                                 type="submit"
                                                 disabled={passwordLoading}
                                                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50"
                                             >
-                                                {passwordLoading ? 'Updating...' : 'Update Password'}
+                                                {passwordLoading ? t('dashboard.settings.password.updating') : t('dashboard.settings.password.updatePassword')}
                                             </button>
                                         </div>
                                     </form>
@@ -2146,7 +2212,7 @@ const Dashboard = () => {
                                             <p className="font-bold">Check your email</p>
                                             <p className="text-sm">Please verify your email address to unlock full bidding limits.</p>
                                         </div>
-                                        <button onClick={() => { setUserVerified(true); alert("Verification email sent!"); }} className="bg-orange-500 text-white px-4 py-2 rounded text-sm font-bold hover:bg-orange-600 whitespace-nowrap">
+                                        <button onClick={() => { setUserVerified(true); alert(t('auth.login.verificationEmailSent')); }} className="bg-orange-500 text-white px-4 py-2 rounded text-sm font-bold hover:bg-orange-600 whitespace-nowrap">
                                             Resend Email
                                         </button>
                                     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "../../utils/currencyUtils";
 
 const ProductCard = ({ product }) => {
     const { t } = useTranslation();
@@ -13,7 +14,7 @@ const ProductCard = ({ product }) => {
     // Live Countdown Logic
     React.useEffect(() => {
         if (!product || product.status !== 'active') {
-            if (product.status !== 'active') setTimeLeft(product.status.toUpperCase());
+            if (product.status !== 'active') setTimeLeft(t(`dashboard.status.${product.status}`).toUpperCase());
             return;
         }
 
@@ -30,9 +31,9 @@ const ProductCard = ({ product }) => {
 
             if (hours > 24) {
                 const days = Math.floor(hours / 24);
-                setTimeLeft(`${days}d ${hours % 24}h`);
+                setTimeLeft(`${days} ${t('time.daysShort')} ${hours % 24} ${t('time.hoursShort')}`);
             } else {
-                setTimeLeft(`${hours}h ${mins}m ${secs}s`);
+                setTimeLeft(`${hours} ${t('time.hoursShort')} ${mins} ${t('time.minutesShort')} ${secs} ${t('time.secondsShort')}`);
             }
             return true;
         };
@@ -44,7 +45,7 @@ const ProductCard = ({ product }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [product?.auctionEndTime, product?.status]);
+    }, [product?.auctionEndTime, product?.status, t]);
 
     const timeLeftMs = new Date(product.auctionEndTime) - new Date();
     const isEndingSoon = (product.status === 'active') && timeLeftMs > 0 && timeLeftMs < 1000 * 60 * 60; // Less than 1 hour
@@ -88,12 +89,12 @@ const ProductCard = ({ product }) => {
                     {images.length > 0 ? (
                         <img
                             src={images[currentImageIndex]}
-                            alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                            alt={t('product.imageAlt', { name: product.name, index: currentImageIndex + 1 })}
                             className="w-full h-full object-cover transition-opacity duration-300"
                             onError={(e) => {
                                 // Fallback to a generic placeholder image if the source fails (e.g., old Cloudinary demo URLs)
                                 e.target.onerror = null;
-                                e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
+                                e.target.src = `https://via.placeholder.com/600x400?text=${t('product.noImage')}`;
                             }}
                         />
                     ) : (
@@ -165,7 +166,7 @@ const ProductCard = ({ product }) => {
                     <div className="flex items-center gap-2">
                         <div>
                             <p className="text-xs text-gray-500">{t('product.timeLeft')}</p>
-                            <p className={`text-sm font-bold ${isEndingSoon ? 'text-orange-600' : 'text-gray-800'}`}>{timeLeft || "N/A"}</p>
+                            <p className={`text-sm font-bold ${isEndingSoon ? 'text-orange-600' : 'text-gray-800'}`}>{timeLeft || t('common.available')}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -179,17 +180,17 @@ const ProductCard = ({ product }) => {
                 {/* Pricing Section */}
                 <div className="mb-4">
                     <div className="flex items-baseline justify-between mb-2">
-                        <div>
+                        <div className="min-w-0 max-w-[10rem]">
                             <p className="text-xs text-gray-500 mb-1">{t('product.currentBid')}</p>
-                            <p className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                                ${product.currentBid.toLocaleString()}
+                            <p className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent overflow-hidden whitespace-nowrap text-ellipsis">
+                                {formatCurrency(product.currentBid)}
                             </p>
                         </div>
                         {product.minBid && (
-                            <div className="text-right">
-                                <p className="text-xs text-gray-500 mb-1">{t('product.minNextBid') || 'Min. Next Bid'}</p>
-                                <p className="text-sm font-semibold text-gray-700">
-                                    ${product.minBid.toLocaleString()}
+                            <div className="text-right min-w-0 max-w-[8rem]">
+                                <p className="text-xs text-gray-500 mb-1">{t('product.minNextBid')}</p>
+                                <p className="text-sm font-semibold text-gray-700 overflow-hidden whitespace-nowrap text-ellipsis">
+                                    {formatCurrency(product.minBid)}
                                 </p>
                             </div>
                         )}

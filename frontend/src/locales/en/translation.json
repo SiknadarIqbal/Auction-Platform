@@ -85,11 +85,14 @@
     "login": "Login",
     "signup": "Sign Up",
     "logout": "Logout",
+    "logoutSuccess": "You have been logged out successfully.",
     "markAllRead": "Mark all read",
     "viewAll": "View All",
     "noNotifications": "No new notifications"
   },
   "auth": {
+    "email": "Email Address",
+    "password": "Password",
     "login": {
       "title": "Welcome Back",
       "subtitle": "Login to your account",
@@ -241,6 +244,8 @@
     }
   },
   "product": {
+    "noImage": "No Image Available",
+    "imageAlt": "{{name}} - Image {{index}}",
     "currentBid": "Current Bid",
     "startingBid": "Starting Bid",
     "timeLeft": "Time Left",
@@ -258,6 +263,7 @@
     "noBids": "No bids yet",
     "item": "item",
     "items": "items",
+    "loadFailed": "Failed to load auctions. Please try again later.",
     "backToAuctions": "Back to Auctions",
     "internetLost": "Internet Connection Lost. Bidding disabled.",
     "retry": "Retry",
@@ -296,15 +302,18 @@
     "unwatch": "Unwatch",
     "sellerCannotBid": "You cannot bid on your own product.",
     "cannotBuyOwnProduct": "You cannot buy your own product.",
-    "buyNowConfirm": "Buy this item immediately for ${{price}}?",
+    "buyNowConfirm": "Buy this item immediately for {{price}}?",
     "reportPrompt": "Please enter reason for reporting (Fraud, Abuse, Fake Item):",
     "reportSubmitted": "Report submitted to Trust & Safety team. Case ID: #REPORT-992",
     "bidPlaceFailed": "Failed to place bid",
     "buyNowFailed": "Buy Now failed",
     "auctionExtended": "Auction time extended due to last-minute bid!",
-    "quickBid500": "+$500",
-    "quickBid1000": "+$1000",
-    "newBidder": "New Bidder"
+    "quickBid500": "+SAR500",
+    "quickBid1000": "+SAR1000",
+    "newBidder": "New Bidder",
+    "auctionExtendedMsg": "Auction time extended due to last minute bid!",
+    "quickBid": "+SAR{{amount}}",
+    "userRoleSeller": "You are the seller"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -338,7 +347,15 @@
       "reasonPlaceholder": "Enter justification/reason...",
       "confirm": "Confirm",
       "pauseSuccess": "Auction paused successfully.",
-      "cancelSuccess": "Auction cancelled successfully."
+      "cancelSuccess": "Auction cancelled successfully.",
+      "auditActions": {
+        "manual_deactivation": "User Deactivated",
+        "reactivate_user": "User Reactivated",
+        "delete_account": "Account Deleted",
+        "deactivate_user": "User Deactivated",
+        "auction_paused": "Auction Paused",
+        "auction_cancelled": "Auction Cancelled"
+      }
     },
     "products": {
       "title": "My Items For Sale",
@@ -350,15 +367,15 @@
       "addFirst": "Add Your First Item",
       "productName": "Product Name",
       "category": "Category",
-      "startingBid": "Starting Bid ($)",
-      "minBid": "Minimum Bid ($)",
-      "buyNowPrice": "Buy Now Price ($)",
+      "startingBid": "Starting Bid (SAR)",
+      "minBid": "Minimum Bid (SAR)",
+      "buyNowPrice": "Buy Now Price (SAR)",
       "optional": "Optional",
       "condition": "Condition",
       "yearMade": "Year Made",
       "location": "Location",
       "contactNumber": "Contact Number",
-      "reservePrice": "Reserve Price ($)",
+      "reservePrice": "Reserve Price (SAR)",
       "duration": "Duration (Days)",
       "productImages": "Product Images",
       "imagesLimit": "Up to 10",
@@ -371,7 +388,42 @@
       "delete": "Delete",
       "status": "Status",
       "currentBid": "Current Bid",
-      "bids": "Bids"
+      "bids": "Bids",
+      "deleteConfirm": "Are you sure you want to delete this auction? This action cannot be undone.",
+      "deleteSuccess": "Auction deleted successfully.",
+      "updateSuccess": "Auction updated successfully!",
+      "createSuccess": "Auction created successfully! It is now live on the website.",
+      "uploadLimitError": "You can only upload up to 10 images",
+      "editErrorWithBids": "This auction cannot be edited because bids have already been placed.",
+      "deleteError": "Error deleting auction",
+      "imagesUploaded": "{{count}} / 10 images uploaded",
+      "chooseFile": "Choose Images",
+      "noFileChosen": "No images selected",
+      "placeholders": {
+        "productName": "e.g: Rolex Watch",
+        "startingBid": "10000",
+        "minBid": "10500",
+        "buyNowPrice": "e.g: 15000",
+        "yearMade": "e.g: 2026",
+        "location": "e.g: UAE",
+        "contactNumber": "e.g: +1 234 567 890",
+        "reservePrice": "Hidden min price",
+        "description": "Detailed description of the product..."
+      },
+      "conditions": {
+        "mint": "Mint",
+        "excellent": "Excellent",
+        "veryGood": "Very Good",
+        "good": "Good",
+        "fair": "Fair",
+        "restored": "Restored"
+      },
+      "durations": {
+        "3days": "3 Days",
+        "5days": "5 Days",
+        "7days": "7 Days",
+        "10days": "10 Days"
+      }
     },
     "unsold": {
       "title": "Unsold Items",
@@ -383,7 +435,10 @@
       "noItems": "No won auctions yet",
       "noItemsSubtitle": "Bid",
       "browse": "Browse Auctions",
-      "finalPrice": "Final Price"
+      "finalPrice": "Final Price",
+      "won": "Won",
+      "callSeller": "Call Seller",
+      "note": "Items listed here have been successfully won by you. Please contact the seller for fulfillment."
     },
     "liveAuctions": {
       "title": "Active Bidding",
@@ -393,10 +448,25 @@
       "browse": "Browse Auctions",
       "viewDetails": "View Details"
     },
+    "bids": {
+      "myMaxBid": "My Max Bid",
+      "highestBid": "Highest Bid",
+      "timeLeft": "Time Left",
+      "currentHighest": "Current Highest",
+      "bidAgain": "Bid Again",
+      "noItems": "No Active Bids",
+      "noItemsSubtitle": "Explore",
+      "browse": "Browse Auctions"
+    },
     "category": {
       "add": "Add Category",
       "addTitle": "Add New Category",
-      "editTitle": "Edit Category"
+      "editTitle": "Edit Category",
+      "deleteConfirm": "Are you sure you want to delete this category?",
+      "deleteSuccess": "Category deleted successfully",
+      "deleteError": "Error deleting category",
+      "createSuccess": "Category created successfully",
+      "updateSuccess": "Category updated successfully"
     },
     "settings": {
       "account": "Account Settings",
@@ -409,7 +479,21 @@
       "deleteAccountDesc": "Permanently delete your account and data",
       "signOut": "Sign Out",
       "signOutDesc": "Log out of your account",
-      "logoutConfirm": "Are you sure you want to logout?"
+      "logoutConfirm": "Are you sure you want to logout?",
+      "deleteAccountConfirm": "WARNING: Are you sure you want to delete your account? This action is permanent and cannot be undone.",
+      "deleteAccountSuccess": "Account deleted successfully.",
+      "deleteAccountError": "Failed to delete account",
+      "managedByAuth": "Managed by Auth System",
+      "password": {
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password",
+        "updating": "Updating...",
+        "updatePassword": "Update Password",
+        "matchError": "New passwords do not match",
+        "success": "Password updated successfully",
+        "error": "Failed to update password"
+      }
     },
     "notifications": {
       "noNotifications": "No new notifications",
@@ -419,8 +503,8 @@
       "clearAll": "Clear All",
       "new": "New",
       "types": {
-        "win": "🏆 Congratulations! You won \"{{title}}\" for ${{price}}.",
-        "sale": "💰 Your auction \"{{title}}\" was sold for ${{price}}!",
+        "win": "🏆 Congratulations! You won \"{{title}}\" for {{price}}.",
+        "sale": "💰 Your auction \"{{title}}\" was sold for {{price}}!",
         "outbid": "📉 You have been outbid on \"{{title}}\"!",
         "new_auction": "📢 New Auction: \"{{title}}\" has just been listed!",
         "info_no_sale": "ℹ️ Your auction \"{{title}}\" ended without a sale.",
@@ -433,14 +517,6 @@
         "auction_cancelled": "❌ The auction for \"{{title}}\" has been cancelled.",
         "default": "🔔 You have a new notification."
       }
-    },
-    "bids": {
-      "myMaxBid": "My Max Bid",
-      "highestBid": "Highest Bid",
-      "timeLeft": "Time Left",
-      "noItems": "No Active Bids",
-      "noItemsSubtitle": "Explore",
-      "browse": "Browse Auctions"
     },
     "actions": {
       "addProduct": "Add Product",
@@ -472,6 +548,25 @@
       "resolved": "Resolved"
     }
   },
+  "categories": {
+    "watches": { "name": "Watches", "description": "Luxury and vintage timepieces from around the world." },
+    "antiques": { "name": "Antiques", "description": "Rare historical artifacts and ancient masterpieces." },
+    "collectibles": { "name": "Collectibles", "description": "Limited edition items, coins, and memorabilia." },
+    "fine-art": { "name": "Fine Art", "description": "Original paintings, sketches, and sculptures." },
+    "art": { "name": "Art", "description": "Original paintings, sketches, and sculptures." },
+    "jewelry": { "name": "Jewelry", "description": "Exquisite gemstones, gold, and designer jewelry." },
+    "furniture": { "name": "Furniture", "description": "Classic and modern high-end furniture pieces." },
+    "electronics": { "name": "Electronics", "description": "Premium gadgets, vintage tech, and high-end audio." },
+    "automobiles": { "name": "Automobiles", "description": "Classic cars, luxury vehicles, and rare parts." },
+    "real-estate": { "name": "Real Estate", "description": "Exclusive properties, land, and luxury estates." },
+    "rare-books": { "name": "Rare Books", "description": "First editions, manuscripts, and historical texts." },
+    "sports-memorabilia": { "name": "Sports Memorabilia", "description": "Signed jerseys, trophies, and historical gear." },
+    "wine-&-spirits": { "name": "Wine & Spirits", "description": "Fine wines, rare whiskies, and vintage spirits." },
+    "musical-instruments": { "name": "Musical Instruments", "description": "Professional gear, vintage guitars, and pianos." },
+    "fashion-&-bags": { "name": "Fashion & Bags", "description": "Designer clothing, rare handbags, and accessories." },
+    "numismatics": { "name": "Numismatics", "description": "Rare coins, banknotes, and currency collections." },
+    "luxury": { "name": "Luxury", "description": "High-end luxury goods and exclusive items." }
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -480,9 +575,11 @@
     "create": "Create",
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "delete": "Delete",
     "edit": "Edit",
     "name": "Name",
+    "note": "Note",
     "description": "Description",
     "add": "Add",
     "close": "Close",
@@ -490,6 +587,7 @@
     "search": "Search",
     "filter": "Filter",
     "sort": "Sort",
+    "adjusted": "adjusted",
     "noResults": "No results found",
     "showMore": "Show More",
     "showLess": "Show Less",
@@ -498,13 +596,29 @@
     "adjustFilters": "Try adjusting your search or filters",
     "select": "Select...",
     "backHome": "Back to Home",
-    "confirmSignOut": "Are you sure you want to sign out?"
+    "english": "English",
+    "arabic": "Arabic",
+    "confirmSignOut": "Are you sure you want to sign out?",
+    "sessionExpired": "Session expired. Please login again.",
+    "switchToEnglish": "Switch to English",
+    "switchToArabic": "Switch to Arabic",
+    "andManyMore": "and many more",
+    "yearsAgo": "{{count}} years ago",
+    "monthsAgo": "{{count}} months ago",
+    "daysAgo": "{{count}} days ago",
+    "hoursAgo": "{{count}} hours ago",
+    "minutesAgo": "{{count}} minutes ago",
+    "secondsAgo": "{{count}} seconds ago"
   },
   "time": {
     "days": "days",
     "hours": "hours",
     "minutes": "minutes",
     "seconds": "seconds",
+    "daysShort": "d",
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "secondsShort": "s",
     "ago": "ago",
     "justNow": "Just now"
   },
@@ -525,17 +639,5 @@
     "help": "Help Center",
     "categories": "Top Categories",
     "copyright": "© 2026 Auction Platform. All rights reserved."
-  },
-  "table": {
-    "image": "Image",
-    "title": "Title",
-    "price": "Price",
-    "status": "Status",
-    "bids": "Bids",
-    "endDate": "End Date",
-    "actions": "Actions",
-    "amount": "Amount",
-    "date": "Date",
-    "time": "Time"
   }
 }

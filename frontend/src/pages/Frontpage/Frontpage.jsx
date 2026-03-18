@@ -49,7 +49,7 @@ const Frontpage = () => {
             }
         } catch (err) {
             console.error("Failed to fetch auctions:", err);
-            setError("Failed to load auctions. Please try again later.");
+            setError(t('product.loadFailed'));
         } finally {
             setLoading(false);
         }
@@ -57,12 +57,12 @@ const Frontpage = () => {
 
     const categories = [
         { id: "all", name: t('frontpage.categories.allItems'), icon: "🔍" },
-        { id: "watches", name: t('frontpage.categories.watches'), icon: "⌚" },
-        { id: "art", name: t('frontpage.categories.art'), icon: "🎨" },
-        { id: "antiques", name: t('frontpage.categories.antiques'), icon: "🏺" },
-        { id: "collectibles", name: t('frontpage.categories.collectibles'), icon: "🪙" },
-        { id: "furniture", name: t('frontpage.categories.furniture'), icon: "🛋️" },
-        { id: "luxury", name: t('frontpage.categories.luxury'), icon: "👜" },
+        { id: "watches", name: t('categories.watches.name'), icon: "⌚" },
+        { id: "art", name: t('categories.art.name'), icon: "🎨" },
+        { id: "antiques", name: t('categories.antiques.name'), icon: "🏺" },
+        { id: "collectibles", name: t('categories.collectibles.name'), icon: "🪙" },
+        { id: "furniture", name: t('categories.furniture.name'), icon: "🛋️" },
+        { id: "luxury", name: t('categories.luxury.name'), icon: "👜" },
     ];
 
     const stats = [
@@ -96,14 +96,7 @@ const Frontpage = () => {
                         <p className="text-xl text-blue-100 mb-8 drop-shadow-md">
                             {t('frontpage.hero.subtitle')}
                         </p>
-                        <div className="flex gap-4">
-                            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                                {t('frontpage.hero.cta')}
-                            </button>
-                            <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-200 shadow-lg">
-                                {t('common.showMore')}
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { joinAuctionRoom, leaveAuctionRoom, getSocket } from "../../services/socketService";
 import { useTranslation } from "react-i18next";
 import { useNotification } from "../../context/NotificationContext";
+import { formatCurrency } from "../../utils/currencyUtils";
 
 
 const ProductDetail = () => {
@@ -133,7 +134,7 @@ const ProductDetail = () => {
                 auctionEndTime: data.newEndTime,
                 extensionCount: data.extensionCount
             }));
-            showInfo('Auction time extended by 5 minutes due to last minute bid!');
+            showInfo(t('product.auctionExtendedMsg'));
         };
 
         socket.on('bid_update', handleBidUpdate);
@@ -155,14 +156,14 @@ const ProductDetail = () => {
         const calculateTimeLeft = () => {
             const diff = new Date(product.auctionEndTime) - new Date();
             if (diff <= 0) {
-                setTimeLeft('Ended');
+                setTimeLeft(t('product.ended'));
                 setAuctionEnded(true);
                 return false;
             }
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const secs = Math.floor((diff % (1000 * 60)) / 1000);
-            setTimeLeft(`${hours}h ${mins}m ${secs}s`);
+            setTimeLeft(`${hours} ${t('time.hoursShort')} ${mins} ${t('time.minutesShort')} ${secs} ${t('time.secondsShort')}`);
             return true;
         };
 
@@ -176,7 +177,7 @@ const ProductDetail = () => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [product?.auctionEndTime, product?.status]);
+    }, [product?.auctionEndTime, product?.status, t]);
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
     if (error || !product) {
@@ -202,7 +203,7 @@ const ProductDetail = () => {
         e.preventDefault();
 
         if (isOffline) {
-            showError("Connection lost. Please check your network and try again.");
+            showError(t('product.internetLost'));
             return;
         }
 
@@ -213,7 +214,7 @@ const ProductDetail = () => {
 
         // Prevent sellers from bidding on their own items
         if (user._id === product.sellerId?._id) {
-            showError("You cannot bid on your own product.");
+            showError(t('product.sellerCannotBid'));
             return;
         }
 
@@ -227,7 +228,7 @@ const ProductDetail = () => {
                 setBidAmount("");
             }
         } catch (err) {
-            showError(err.response?.data?.message || "Failed to place bid");
+            showError(err.response?.data?.message || t('product.bidPlaceFailed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -240,11 +241,11 @@ const ProductDetail = () => {
         }
 
         if (isSeller) {
-            showError("You cannot buy your own product.");
+            showError(t('product.cannotBuyOwnProduct'));
             return;
         }
 
-        const confirmed = await showConfirm(`Buy this item immediately for $${product.buyNowPrice.toLocaleString()}?`);
+        const confirmed = await showConfirm(t('product.buyNowConfirm', { price: formatCurrency(product.buyNowPrice) }));
         if (confirmed) {
             try {
                 const response = await bidService.buyNow(id);
@@ -252,13 +253,13 @@ const ProductDetail = () => {
                     setAuctionEnded(true);
                 }
             } catch (err) {
-                showError(err.response?.data?.message || "Buy Now failed");
+                showError(err.response?.data?.message || t('product.buyNowFailed'));
             }
         }
     };
 
     const handleReport = () => {
-        showSuccess("Report submitted to Trust & Safety team. Case ID: #REPORT-992");
+        showSuccess(t('product.reportSubmitted'));
     };
 
 
@@ -297,7 +298,7 @@ const ProductDetail = () => {
                             </div>
                             <div className="bg-gray-50 p-6 rounded-xl">
                                 <p className="text-sm text-gray-500 mb-1">{t('product.finalPrice')}</p>
-                                <p className="text-xl font-bold text-green-600">${product.buyNowPrice.toLocaleString()}</p>
+                                <p className="text-xl font-bold text-green-600">{formatCurrency(product.buyNowPrice)}</p>
                             </div>
                         </div>
                         <div className="mt-8 flex justify-center gap-4">
@@ -360,7 +361,7 @@ const ProductDetail = () => {
                                                 {images.length > 0 ? (
                                                     <img
                                                         src={images[currentImageIndex]}
-                                                        alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                                                        alt={t('product.imageAlt', { name: product.name, index: currentImageIndex + 1 })}
                                                         className="w-full h-full object-cover transition-opacity duration-300"
                                                         onError={(e) => {
                                                             console.error(`Image failed to load: ${images[currentImageIndex]}`);
@@ -431,7 +432,7 @@ const ProductDetail = () => {
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 mb-1">{t('product.condition')}</p>
-                                            <p className="font-semibold text-gray-800">{product.condition}</p>
+                                            <p className="font-semibold text-gray-800">{t(`dashboard.products.conditions.${product.condition?.toLowerCase().replace(' ', '')}`) || product.condition}</p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 mb-1">{t('product.yearMade')}</p>
@@ -467,7 +468,11 @@ const ProductDetail = () => {
                                     </h1>
                                     <div className="flex items-center gap-3 mb-4">
                                         <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                                            {product.category}
+                                            {(() => {
+                                                const catKey = `categories.${product.category}.name`;
+                                                const translatedCat = t(catKey);
+                                                return translatedCat !== catKey ? translatedCat : product.category;
+                                            })()}
                                         </span>
                                         <span className="text-gray-500 text-sm">{t('product.productId')}: #{product.id}</span>
                                     </div>
@@ -533,13 +538,13 @@ const ProductDetail = () => {
                                     {/* Current Bid */}
                                     <div className="mb-6 p-5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
                                         <div className="flex justify-between items-start">
-                                            <div>
+                                            <div className="min-w-0">
                                                 <p className="text-sm text-gray-600 mb-1">{t('product.currentBid')}</p>
-                                                <p className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                                                    ${(product.currentBid || 0).toLocaleString()}
+                                                <p className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent overflow-hidden whitespace-nowrap text-ellipsis max-w-full">
+                                                    {formatCurrency(product.currentBid || 0)}
                                                 </p>
                                             </div>
-                                            <div className="text-right">
+                                            <div className="text-right flex-shrink-0">
                                                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${isReserveMet ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
                                                     {isReserveMet ? t('product.reserveMet') : t('product.reserveNotMet')}
                                                 </span>
@@ -578,7 +583,7 @@ const ProductDetail = () => {
                                                 {t('product.yourBidAmount')}
                                             </label>
                                             <div className="relative">
-                                                <span className="absolute left-4 top-4 text-gray-500 text-lg font-semibold">$</span>
+                                                <span className="absolute left-4 top-4 text-gray-500 text-lg font-semibold">SAR</span>
                                                 <input
                                                     type="number"
                                                     value={bidAmount}
@@ -587,11 +592,11 @@ const ProductDetail = () => {
                                                     min={product.minBid}
                                                     step="100"
                                                     required
-                                                    className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-lg text-lg font-semibold focus:outline-none focus:border-blue-500 transition duration-200"
+                                                    className="w-full pl-16 pr-4 py-4 border-2 border-gray-200 rounded-lg text-lg font-semibold focus:outline-none focus:border-blue-500 transition duration-200"
                                                 />
                                             </div>
                                             <p className="text-xs text-gray-500 mt-2">
-                                                {t('product.minBid')}: ${(product.minBid || 0).toLocaleString()}
+                                                {t('product.minBid')}: {formatCurrency(product.minBid || 0)}
                                             </p>
                                         </div>
 
@@ -606,10 +611,10 @@ const ProductDetail = () => {
                                                     {t('product.processingBid')}
                                                 </>
                                             ) : isSeller ? (
-                                                t('product.sellerCannotBid') || "You are the seller"
+                                                t('product.userRoleSeller')
                                             ) : (
                                                 <>
-                                                    {t('product.placeBid')} ({t('product.minBidButton')} ${(product.minBid || 0).toLocaleString()})
+                                                    {t('product.placeBid')} ({t('product.minBidButton')} {formatCurrency(product.minBid || 0)})
                                                 </>
                                             )}
                                         </button>
@@ -627,13 +632,13 @@ const ProductDetail = () => {
                                             onClick={() => setBidAmount((product.minBid + 500).toString())}
                                             className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition duration-200"
                                         >
-                                            +$500
+                                            {t('product.quickBid', { amount: 500 })}
                                         </button>
                                         <button
                                             onClick={() => setBidAmount((product.minBid + 1000).toString())}
                                             className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition duration-200"
                                         >
-                                            +$1000
+                                            {t('product.quickBid', { amount: 1000 })}
                                         </button>
                                     </div>
                                 </div>
@@ -653,8 +658,8 @@ const ProductDetail = () => {
                                                         <p className="text-xs text-gray-500">{bid.timestamp ? new Date(bid.timestamp).toLocaleString() : t('product.justNow')}</p>
                                                     </div>
                                                 </div>
-                                                <p className="text-lg font-bold text-green-600">
-                                                    ${(bid.bidAmount || bid.amount || 0).toLocaleString()}
+                                                <p className="text-lg font-bold text-green-600 overflow-hidden whitespace-nowrap text-ellipsis max-w-[10rem]">
+                                                    {formatCurrency(bid.bidAmount || bid.amount || 0)}
                                                 </p>
                                             </div>
                                         ))}

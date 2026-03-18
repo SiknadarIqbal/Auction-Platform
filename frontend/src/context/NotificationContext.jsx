@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
+    const { t } = useTranslation();
     const [toasts, setToasts] = useState([]);
 
     const addToast = useCallback((message, type = "info", duration = 4000) => {
@@ -40,8 +42,8 @@ export const NotificationProvider = ({ children }) => {
                 <div class="toast-confirm-dialog">
                     <p class="confirm-message">${message}</p>
                     <div class="confirm-buttons">
-                        <button class="btn-cancel">Cancel</button>
-                        <button class="btn-confirm">Confirm</button>
+                        <button class="btn-cancel">${t('common.cancel')}</button>
+                        <button class="btn-confirm">${t('common.confirm')}</button>
                     </div>
                 </div>
             `;
@@ -75,7 +77,7 @@ export const NotificationProvider = ({ children }) => {
             };
             document.addEventListener("keydown", handleEscape);
         });
-    }, []);
+    }, [t]);
 
     return (
         <NotificationContext.Provider

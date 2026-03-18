@@ -53,17 +53,17 @@ const Signup = () => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
+            alert(t('auth.signup.passwordMismatch'));
             return;
         }
 
         if (formData.password.length < 6) {
-            alert("Password must be at least 6 characters long");
+            alert(t('auth.signup.passwordShortError'));
             return;
         }
 
         if (!acceptTerms) {
-            alert("Please accept the terms and conditions");
+            alert(t('auth.signup.acceptTermsError'));
             return;
         }
 
@@ -88,11 +88,11 @@ const Signup = () => {
                 });
                 setAcceptTerms(false);
             } else {
-                alert(response.message || "Registration failed");
+                alert(response.message || t('messages.signupError'));
             }
         } catch (error) {
             console.error("Signup error:", error);
-            alert(error.message || "An unexpected error occurred during registration");
+            alert(error.message || t('messages.signupError'));
         }
     };
 
@@ -116,16 +116,16 @@ const Signup = () => {
                     <div className="mb-16">
                         <h1 className="text-4xl font-bold mb-3 flex items-center gap-3">
                             <FaUniversity className="text-5xl" />
-                            {t('auth.signup.joinCommunity') || 'Join Our Community'}
+                            {t('auth.signup.joinCommunity')}
                         </h1>
                         <p className="text-purple-100 text-lg">
-                            {t('auth.signup.journeyStart') || 'Start your journey to discover rare treasures'}
+                            {t('auth.signup.journeyStart')}
                         </p>
                     </div>
 
                     {/* Benefits */}
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-semibold mb-6">{t('auth.signup.benefits') || 'Member Benefits'}</h2>
+                        <h2 className="text-2xl font-semibold mb-6">{t('auth.signup.benefits')}</h2>
                         {benefits.map((benefit, index) => (
                             <div
                                 key={index}
@@ -148,12 +148,12 @@ const Signup = () => {
                             <FaUser />
                         </div>
                         <div>
-                            <p className="font-semibold">Auction Platform</p>
-                            <p className="text-purple-200 text-sm">Collector since 2025</p>
+                            <p className="font-semibold">{t('navbar.title')}</p>
+                            <p className="text-purple-200 text-sm">{t('auth.signup.testimonial.role')}</p>
                         </div>
                     </div>
                     <p className="text-purple-100 italic">
-                        "Best auction platform I've used. Won amazing collectibles at great prices!"
+                        {t('auth.signup.testimonial.quote')}
                     </p>
                 </div>
             </div>
@@ -182,16 +182,16 @@ const Signup = () => {
                                 <div className="flex items-start">
                                     <div className="flex-1">
                                         <h3 className="text-green-800 font-semibold mb-2">
-                                            ✅ {t('auth.signup.successTitle') || 'Registration Successful!'}
+                                            ✅ {t('auth.signup.successTitle')}
                                         </h3>
                                         <p className="text-sm text-green-700 mb-2">
-                                            {t('auth.signup.successMessage') || 'Please check your email inbox for a verification link. You must verify your email before you can log in.'}
+                                            {t('auth.signup.successMessage')}
                                         </p>
                                         <Link
                                             to="/login"
                                             className="text-sm text-green-700 underline hover:text-green-900 font-semibold"
                                         >
-                                            {t('auth.signup.goToLogin') || 'Go to Login'} →
+                                            {t('auth.signup.goToLogin')} →
                                         </Link>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@ const Signup = () => {
                                         name="fullName"
                                         value={formData.fullName}
                                         onChange={handleChange}
-                                        placeholder="John Doe"
+                                        placeholder={t('auth.signup.placeholders.name')}
                                         required
                                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />
@@ -232,7 +232,7 @@ const Signup = () => {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        placeholder="you@example.com"
+                                        placeholder={t('auth.signup.placeholders.email')}
                                         required
                                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />
@@ -251,7 +251,7 @@ const Signup = () => {
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder="Create a strong password"
+                                        placeholder={t('auth.signup.placeholders.password')}
                                         required
                                         className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />
@@ -293,7 +293,7 @@ const Signup = () => {
                                         name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
-                                        placeholder="Re-enter your password"
+                                        placeholder={t('auth.signup.placeholders.confirmPassword')}
                                         required
                                         className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
                                     />
@@ -306,7 +306,7 @@ const Signup = () => {
                                     </button>
                                 </div>
                                 {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                                    <p className="text-red-500 text-xs mt-1">{t('auth.signup.passwordMismatch') || 'Passwords do not match'}</p>
+                                    <p className="text-red-500 text-xs mt-1">{t('auth.signup.passwordMismatch')}</p>
                                 )}
                             </div>
 
@@ -322,8 +322,8 @@ const Signup = () => {
                                         {role === 'buyer' && <FaCheck className="text-white text-[10px]" />}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <label className="text-sm font-bold text-gray-800 cursor-pointer block truncate">{t('auth.signup.buyer') || 'Buyer'}</label>
-                                        <p className="text-[10px] text-gray-500 truncate">Purchase items</p>
+                                        <label className="text-sm font-bold text-gray-800 cursor-pointer block truncate">{t('auth.signup.buyer')}</label>
+                                        <p className="text-[10px] text-gray-500 truncate">{t('auth.signup.buyerDesc')}</p>
                                     </div>
                                     <div className="text-2xl text-indigo-600 shrink-0"><FaShoppingBag /></div>
                                 </div>
@@ -337,8 +337,8 @@ const Signup = () => {
                                         {role === 'seller' && <FaCheck className="text-white text-[10px]" />}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <label className="text-sm font-bold text-gray-800 cursor-pointer block truncate">{t('auth.signup.seller') || 'Seller'}</label>
-                                        <p className="text-[10px] text-gray-500 truncate">List auctions</p>
+                                        <label className="text-sm font-bold text-gray-800 cursor-pointer block truncate">{t('auth.signup.seller')}</label>
+                                        <p className="text-[10px] text-gray-500 truncate">{t('auth.signup.sellerDesc')}</p>
                                     </div>
                                     <div className="text-2xl text-indigo-600 shrink-0"><FaStore /></div>
                                 </div>
@@ -353,8 +353,8 @@ const Signup = () => {
                                     onChange={(e) => setAcceptTerms(e.target.checked)}
                                     className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300 cursor-pointer"
                                 />
-                                <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none">
-                                    I agree to the <Link to="/agreement" className="text-blue-600 hover:underline">Terms of Service</Link> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+                                 <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none">
+                                    {t('auth.signup.terms.prefix')} <Link to="/agreement" className="text-blue-600 hover:underline">{t('footer.terms')}</Link> {t('auth.signup.terms.and')} <a href="#" className="text-blue-600 hover:underline">{t('footer.privacy')}</a>
                                 </label>
                             </div>                            {/* Submit Button */}
                             <button
