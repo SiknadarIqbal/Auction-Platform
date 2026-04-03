@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './i18n'
@@ -8,10 +8,12 @@ import { NotificationProvider } from './context/NotificationContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <NotificationProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </NotificationProvider>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <NotificationProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </NotificationProvider>
+    </Suspense>
   </StrictMode>,
 )

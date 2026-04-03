@@ -26,6 +26,7 @@ export const getAllAuctions = async (req, res) => {
         const auctions = await Auction.find(query)
             .populate('sellerId', 'name avatar isEmailVerified')
             .populate('highestBidderId', 'name')
+            .populate('winnerId', 'name')
             .sort({ createdAt: -1 })
             .limit(limit * 1)
             .skip((page - 1) * limit);
@@ -68,7 +69,8 @@ export const getAuction = async (req, res) => {
             { new: true }
         )
             .populate('sellerId', 'name avatar isEmailVerified')
-            .populate('highestBidderId', 'name');
+            .populate('highestBidderId', 'name')
+            .populate('winnerId', 'name');
 
         if (!auction) {
             return res.status(404).json({
@@ -314,6 +316,7 @@ export const getMyAuctions = async (req, res) => {
 
         const auctions = await Auction.find(query)
             .populate('highestBidderId', 'name')
+            .populate('winnerId', 'name')
             .sort({ createdAt: -1 });
 
         res.json({
@@ -338,6 +341,7 @@ export const getWonAuctions = async (req, res) => {
             status: 'sold'
         })
             .populate('sellerId', 'name avatar')
+            .populate('winnerId', 'name')
             .lean() // Use lean to allow adding properties
             .sort({ updatedAt: -1 });
 

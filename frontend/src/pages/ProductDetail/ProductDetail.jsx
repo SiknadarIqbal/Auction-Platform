@@ -285,20 +285,41 @@ const ProductDetail = () => {
                 {/* Auction Ended View */}
                 {auctionEnded ? (
                     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden mb-8 p-10 text-center animate-slideDown">
-                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span className="text-4xl">🏆</span>
+                        <div className={`w-20 h-20 ${product.status === 'sold' ? 'bg-green-100' : 'bg-amber-100'} rounded-full flex items-center justify-center mx-auto mb-6`}>
+                            <span className="text-4xl">{product.status === 'sold' ? '🏆' : '⌛'}</span>
                         </div>
                         <h2 className="text-3xl font-bold text-gray-800 mb-2">{t('product.auctionEndedTitle')}</h2>
-                        <p className="text-gray-500 mb-8">{t('product.auctionEndedSubtitle')}</p>
+                        <p className="text-gray-500 mb-8">
+                            {product.status === 'sold'
+                                ? t('product.auctionEndedSubtitle')
+                                : t('product.auctionEndedUnsoldSubtitle')}
+                        </p>
 
                         <div className="grid grid-cols-2 gap-8 max-w-lg mx-auto">
                             <div className="bg-gray-50 p-6 rounded-xl">
                                 <p className="text-sm text-gray-500 mb-1">{t('product.winningBidder')}</p>
-                                <p className="text-xl font-bold text-gray-800">You ({t('product.verified')})</p>
+                                <p className="text-xl font-bold text-gray-800">
+                                    {product.status === 'sold'
+                                        ? (() => {
+                                            const winner = product.winnerId || product.highestBidderId;
+                                            const winnerId = winner?._id || winner;
+                                            const currentUserId = user?._id || user;
+                                            
+                                            if (winnerId && currentUserId && winnerId.toString() === currentUserId.toString()) {
+                                                return `${t('product.user')} (${t('product.verified')})`;
+                                            }
+                                            return winner?.name || t('product.newBidder');
+                                        })()
+                                        : t('product.noWinner')}
+                                </p>
                             </div>
                             <div className="bg-gray-50 p-6 rounded-xl">
-                                <p className="text-sm text-gray-500 mb-1">{t('product.finalPrice')}</p>
-                                <p className="text-xl font-bold text-green-600">{formatCurrency(product.buyNowPrice)}</p>
+                                <p className="text-sm text-gray-500 mb-1">
+                                    {product.status === 'sold' ? t('product.finalPrice') : t('product.finalBid')}
+                                </p>
+                                <p className={`text-xl font-bold ${product.status === 'sold' ? 'text-green-600' : 'text-gray-600'}`}>
+                                    {formatCurrency(product.finalPrice || product.currentHighestBid || product.currentBid || 0)}
+                                </p>
                             </div>
                         </div>
                         <div className="mt-8 flex justify-center gap-4">

@@ -1,32 +1,27 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-
-import translationEN from './locales/en/translation.json';
-import translationAR from './locales/ar/translation.json';
-
-const resources = {
-    en: {
-        translation: translationEN
-    },
-    ar: {
-        translation: translationAR
-    }
-};
+import Backend from 'i18next-http-backend';
 
 i18n
+    .use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        resources,
+        supportedLngs: ['en', 'ar'],
         fallbackLng: 'en',
+        load: 'languageOnly',
         debug: false,
         interpolation: {
-            escapeValue: false
+            escapeValue: false // react already safes from xss
+        },
+        backend: {
+            loadPath: '/locales/{{lng}}/translation.json',
         },
         detection: {
-            order: ['localStorage', 'navigator'],
-            caches: ['localStorage']
+            order: ['querystring', 'localStorage', 'navigator'],
+            caches: ['localStorage'],
+            lookupQuerystring: 'lng'
         }
     });
 

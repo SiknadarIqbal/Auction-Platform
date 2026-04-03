@@ -80,6 +80,7 @@
         "title": "منصة المزاد",
         "subtitle": "مقتنيات فاخرة",
         "search": "البحث في المزادات...",
+        "changeLanguage": "تغيير اللغة",
         "notifications": "الإشعارات",
         "dashboard": "لوحة التحكم",
         "login": "تسجيل الدخول",
@@ -269,8 +270,11 @@
         "retry": "إعادة المحاولة",
         "auctionEndedTitle": "انتهى المزاد",
         "auctionEndedSubtitle": "تم بيع هذا العنصر بنجاح.",
+        "auctionEndedUnsoldSubtitle": "انتهى هذا المزاد دون بيع.",
         "winningBidder": "المزايد الفائز",
+        "noWinner": "لم يتم الوصول للسعر المحتفظ به",
         "finalPrice": "السعر النهائي",
+        "finalBid": "آخر عرض",
         "goToDashboard": "الذهاب إلى لوحة التحكم",
         "bidSuccess": "تم تقديم العرض بنجاح!",
         "yearMade": "سنة الصنع",
@@ -428,7 +432,8 @@
         "unsold": {
             "title": "العناصر غير المباعة",
             "noItems": "لا توجد عناصر غير مباعة.",
-            "noItemsSubtitle": "الأرشيف"
+            "noItemsSubtitle": "الأرشيف",
+            "reserveNotMet": "لم يتم الوصول للسعر المحتفظ به"
         },
         "wonAuctions": {
             "title": "المزادات الفائزة",
@@ -518,36 +523,36 @@
                 "auction_cancelled": "❌ تم إلغاء مزاد \"{{title}}\".",
                 "default": "🔔 لديك إشعار جديد."
             }
-        },
-        "actions": {
-            "addProduct": "إضافة منتج",
-            "edit": "تعديل",
-            "delete": "حذف",
-            "view": "عرض",
-            "pay": "دفع",
-            "cancel": "إلغاء"
-        },
-        "table": {
-            "image": "الصورة",
-            "title": "العنوان",
-            "price": "السعر",
-            "status": "الحالة",
-            "bids": "العروض",
-            "endDate": "تاريخ الانتهاء",
-            "actions": "الإجراءات",
-            "amount": "المبلغ",
-            "date": "التاريخ",
-            "time": "الوقت"
-        },
-        "status": {
-            "active": "نشط",
-            "ended": "منتهي",
-            "sold": "مباع",
-            "unsold": "غير مباع",
-            "winning": "فائز",
-            "outbid": "تم التفوق عليه",
-            "resolved": "تم الحل"
         }
+    },
+    "table": {
+        "image": "الصورة",
+        "title": "العنوان",
+        "price": "السعر",
+        "status": "الحالة",
+        "bids": "العروض",
+        "endDate": "تاريخ الانتهاء",
+        "actions": "الإجراءات",
+        "amount": "المبلغ",
+        "date": "التاريخ",
+        "time": "الوقت"
+    },
+    "status": {
+        "active": "نشط",
+        "ended": "منتهي",
+        "sold": "مباع",
+        "unsold": "غير مباع",
+        "winning": "فائز",
+        "outbid": "تم التفوق عليه",
+        "resolved": "تم الحل"
+    },
+    "actions": {
+        "addProduct": "إضافة منتج",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "view": "عرض",
+        "pay": "دفع",
+        "cancel": "إلغاء"
     },
     "categories": {
         "watches": { "name": "ساعات", "description": "ساعات فاخرة ونادرة من جميع أنحاء العالم." },

@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
     // Live Countdown Logic
     React.useEffect(() => {
         if (!product || product.status !== 'active') {
-            if (product.status !== 'active') setTimeLeft(t(`dashboard.status.${product.status}`).toUpperCase());
+            if (product.status !== 'active') setTimeLeft(t(`status.${product.status}`).toUpperCase());
             return;
         }
 

@@ -80,6 +80,7 @@
     "title": "Auction Platform",
     "subtitle": "Premium Collectibles",
     "search": "Search auctions...",
+    "changeLanguage": "Change Language",
     "notifications": "Notifications",
     "dashboard": "Dashboard",
     "login": "Login",
@@ -269,8 +270,11 @@
     "retry": "Retry",
     "auctionEndedTitle": "Auction Ended",
     "auctionEndedSubtitle": "This item has been sold successfully.",
+    "auctionEndedUnsoldSubtitle": "This item has ended without a sale.",
     "winningBidder": "Winning Bidder",
+    "noWinner": "Reserve Price Not Met",
     "finalPrice": "Final Price",
+    "finalBid": "Final Bid",
     "goToDashboard": "Go to Dashboard",
     "bidSuccess": "Bid placed successfully!",
     "yearMade": "Year Made",
@@ -428,7 +432,8 @@
     "unsold": {
       "title": "Unsold Items",
       "noItems": "No unsold items.",
-      "noItemsSubtitle": "Archive"
+      "noItemsSubtitle": "Archive",
+      "reserveNotMet": "Reserve Not Met"
     },
     "wonAuctions": {
       "title": "Won Auctions",
@@ -517,36 +522,36 @@
         "auction_cancelled": "❌ The auction for \"{{title}}\" has been cancelled.",
         "default": "🔔 You have a new notification."
       }
-    },
-    "actions": {
-      "addProduct": "Add Product",
-      "edit": "Edit",
-      "delete": "Delete",
-      "view": "View",
-      "pay": "Pay",
-      "cancel": "Cancel"
-    },
-    "table": {
-      "image": "Image",
-      "title": "Title",
-      "price": "Price",
-      "status": "Status",
-      "bids": "Bids",
-      "endDate": "End Date",
-      "actions": "Actions",
-      "amount": "Amount",
-      "date": "Date",
-      "time": "Time"
-    },
-    "status": {
-      "active": "Active",
-      "ended": "Ended",
-      "sold": "Sold",
-      "unsold": "Unsold",
-      "winning": "Winning",
-      "outbid": "Outbid",
-      "resolved": "Resolved"
     }
+  },
+  "table": {
+    "image": "Image",
+    "title": "Title",
+    "price": "Price",
+    "status": "Status",
+    "bids": "Bids",
+    "endDate": "End Date",
+    "actions": "Actions",
+    "amount": "Amount",
+    "date": "Date",
+    "time": "Time"
+  },
+  "status": {
+    "active": "Active",
+    "ended": "Ended",
+    "sold": "Sold",
+    "unsold": "Unsold",
+    "winning": "Winning",
+    "outbid": "Outbid",
+    "resolved": "Resolved"
+  },
+  "actions": {
+    "addProduct": "Add Product",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "pay": "Pay",
+    "cancel": "Cancel"
   },
   "categories": {
     "watches": { "name": "Watches", "description": "Luxury and vintage timepieces from around the world." },

@@ -975,7 +975,7 @@ const Dashboard = () => {
                                                                 </div>
                                                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${auction.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                                                                     }`}>
-                                                                    {t(`dashboard.status.${auction.status}`)}
+                                                                    {t(`status.${auction.status}`)}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -1237,7 +1237,7 @@ const Dashboard = () => {
                                                         <h3 className="font-bold text-gray-900 truncate pr-2">{bid.auctionId?.title}</h3>
                                                         {bid.status === 'winning' && (
                                                             <span className="shrink-0 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">
-                                                                {t('dashboard.status.winning')}
+                                                                {t('status.winning')}
                                                             </span>
                                                         )}
                                                     </div>
@@ -1313,7 +1313,7 @@ const Dashboard = () => {
                                                     <td className="px-6 py-4">
                                                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${bid.status === 'winning' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                                             }`}>
-                                                            {bid.status === 'winning' ? t('dashboard.status.winning') : t('dashboard.status.outbid')}
+                                                            {bid.status === 'winning' ? t('status.winning') : t('status.outbid')}
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -1420,7 +1420,7 @@ const Dashboard = () => {
                                                         <div className="flex items-center gap-3 mt-1">
                                                             <span className="text-[10px] uppercase font-bold text-gray-400">#{p._id?.slice(-8) || p.id?.slice(-8)}</span>
                                                             <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${p.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                                                                {t(`dashboard.status.${p.status}`)}
+                                                                {t(`status.${p.status}`)}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -1623,7 +1623,7 @@ const Dashboard = () => {
                                                     <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">#{product._id?.slice(-8) || product.id?.slice(-8)}</p>
                                                 </div>
                                                 <span className="shrink-0 px-2 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-black uppercase tracking-widest border border-green-100">
-                                                    {t('dashboard.status.active')}
+                                                    {t('status.active')}
                                                 </span>
                                             </div>
                                             <div className="grid grid-cols-2 gap-4 mb-5 p-3 bg-gray-50 rounded-xl border border-gray-50">
@@ -1690,7 +1690,7 @@ const Dashboard = () => {
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <span className="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-[10px] font-black uppercase tracking-widest border border-green-200 shadow-sm">
-                                                            {t('dashboard.status.active')}
+                                                            {t('status.active')}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-right">
