@@ -12,7 +12,10 @@ const connectDB = async () => {
     dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
     console.log('☁️  Connecting to MongoDB Atlas...');
 
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      autoIndex: process.env.NODE_ENV !== 'production', // Don't build indexes in production
+    });
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
 

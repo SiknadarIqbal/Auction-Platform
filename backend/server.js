@@ -25,7 +25,7 @@ import statsRoutes from './routes/stats.js';
 dotenv.config();
 
 // Connect to MongoDB
-connectDB();
+await connectDB();
 
 // Start Cron Jobs (Automated Auction Closure)
 startCronJobs();
